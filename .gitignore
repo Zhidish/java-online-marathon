@@ -1,3 +1,4 @@
+
 out/
 
 .idea/$CACHE_FILE$
@@ -34,6 +35,21 @@ idea/compiler.xml
 
 
 
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+
+
+
+
+
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -41,7 +57,11 @@ idea/compiler.xml
 .idea/**/shelf
 
 
+HELP.md
 target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -52,4 +72,3 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
-
