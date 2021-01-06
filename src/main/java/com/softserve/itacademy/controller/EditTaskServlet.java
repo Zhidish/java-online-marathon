@@ -46,7 +46,7 @@ public class EditTaskServlet extends HttpServlet {
 
         if (task == null) {
             request.setAttribute("id", id);
-            request.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(request,response);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
         else{
             request.setAttribute("task", task);

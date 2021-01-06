@@ -31,18 +31,17 @@ public class ReadServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/pages/show-task.jsp");
 
-
         int id = Integer.parseInt(request.getParameter("id"));
         Task task = taskRepository.read(id);
 
         if (task == null) {
             request.setAttribute("id", id);
-            request.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(request,response);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
 
         }
-
-        request.setAttribute("task_1", task);
-        requestDispatcher.forward(request, response);
-
+        else {
+            request.setAttribute("task_1", task);
+            requestDispatcher.forward(request, response);
+        }
     }
 }
