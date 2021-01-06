@@ -5,6 +5,10 @@
 </head>
 <body>
 <%@include file="header.html"%>
+    <% boolean taskExist = (Boolean) request.getAttribute("taskExists"); %>
+    <% if(taskExist) { %>
+        <p>Task with a given name already exists!</p>
+    <% } %>
 <form action="/create-task" method="post">
     <table>
         <tr>

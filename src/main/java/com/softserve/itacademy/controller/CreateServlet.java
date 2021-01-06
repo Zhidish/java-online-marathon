@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "CreateTask",  value="/create-task")
 public class CreateServlet extends HttpServlet {
@@ -21,19 +22,26 @@ public class CreateServlet extends HttpServlet {
 
     }
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("taskExists", false);
         request.getRequestDispatcher("/WEB-INF/pages/create-task.jsp").forward(request, response);
-
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/pages/show-tasks.jsp");
+        RequestDispatcher requestDispatcher;
         String title = request.getParameter("task");
         String priority = request.getParameter("priority");
+
         Task newTask = new Task(title, priority);
-        taskRepository.create(newTask);
-        request.setAttribute("tasks", taskRepository.all());
+        if(!taskRepository.create(newTask)){
+            request.setAttribute("taskExists", true);
+            requestDispatcher = request.getRequestDispatcher("/WEB-INF/pages/create-task.jsp");
+        }
+        else{
+            requestDispatcher = request.getRequestDispatcher("/WEB-INF/pages/show-tasks.jsp");
+            request.setAttribute("tasks", taskRepository.all());
+        }
+
         requestDispatcher.forward(request, response);
 
 
