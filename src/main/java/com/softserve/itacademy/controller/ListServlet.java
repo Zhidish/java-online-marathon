@@ -26,6 +26,9 @@ public class ListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setAttribute("tasks",taskRepository.all());
+
         request.getRequestDispatcher("/WEB-INF/pages/show-tasks.jsp").forward(request, response);
 
 

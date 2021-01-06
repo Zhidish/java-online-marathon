@@ -8,7 +8,7 @@
     <title>Title</title>
 </head>
 <body>
-
+<%@include file="header.html"%>
 
 <%! int i = 0; %>
 
@@ -34,7 +34,7 @@
             <%= task.getPriority()%>
         </td>
         <td>
-            <a href="/read-task?id=<%=task.getId()%>">Read
+            <a href="${pageContext.request.contextPath}/read-task?id=<%=task.getId()%>">Read
 
             </a><td>
 
