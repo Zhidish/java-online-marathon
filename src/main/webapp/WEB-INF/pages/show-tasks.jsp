@@ -6,6 +6,12 @@
 <html>
 <head>
     <title>Title</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 <%@include file="header.html"%>
@@ -33,21 +39,18 @@
         <td>
             <%= task.getPriority()%>
         </td>
-        <td>
-            <a href="${pageContext.request.contextPath}/read-task?id=<%=task.getId()%>">Read
-
-            </a><td>
 
         <td>
-            <a href="/edit-task?id=<%=task.getId()%>">Edit
-
-            </a><td>
+            <a href="${pageContext.request.contextPath}/read-task?id=<%=task.getId()%>">Read</a>
+        </td>
 
         <td>
-            <a href="/delete-task?id=<%=task.getId()%>">Delete
+            <a href="/edit-task?id=<%=task.getId()%>">Edit</a>
+        </td>
 
-            </a><td>
-
+        <td>
+            <a href="/delete-task?id=<%=task.getId()%>">Delete</a>
+        </td>
 
     </tr>
     <% }%>
