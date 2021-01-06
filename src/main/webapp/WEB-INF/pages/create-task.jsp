@@ -5,6 +5,8 @@
 </head>
 <body>
 <%@include file="header.html"%>
+<h1>Create new Task</h1>
+
     <% boolean taskExist = (Boolean) request.getAttribute("taskExists"); %>
     <% if(taskExist) { %>
         <p>Task with a given name already exists!</p>

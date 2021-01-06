@@ -15,9 +15,9 @@
 </head>
 <body>
 <%@include file="header.html"%>
+<h1>List of Tasks</h1>
 
 <%! int i = 0; %>
-
 <table>
 
     <tr>
