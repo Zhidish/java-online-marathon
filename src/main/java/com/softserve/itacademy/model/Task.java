@@ -17,6 +17,13 @@ public class Task {
         id = counter++;
     }
 
+
+    public Task(String title, String priority){
+        this.title=title;
+        this.priority=Priority.valueOf(priority.toUpperCase());
+        id = counter++;
+    }
+
     public int getId() {
         return id;
     }
