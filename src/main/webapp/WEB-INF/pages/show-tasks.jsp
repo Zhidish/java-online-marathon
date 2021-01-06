@@ -20,7 +20,7 @@
         <td>Priority</td>
         <td colspan="3">Operations</td>
     </tr>
-
+    <% i = 0; %>
     <% for(Task task:(List<Task>) request.getAttribute("tasks")){ %>
 
     <tr>
