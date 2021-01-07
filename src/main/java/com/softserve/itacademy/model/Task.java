@@ -8,9 +8,14 @@ public class Task {
 
     private Priority priority;
 
+    private int id;
+
+    private static int counter;
+
     public Task(String name, Priority priority) {
         this.name = name;
         this.priority = priority;
+        this.id = counter++;
     }
 
     public String getName() {
@@ -29,12 +34,13 @@ public class Task {
         this.priority = priority;
     }
 
+    public int getId(){
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(name, task.name) && priority == task.priority;
+        return this.getId() == ((Task) o).getId();
     }
 
     @Override

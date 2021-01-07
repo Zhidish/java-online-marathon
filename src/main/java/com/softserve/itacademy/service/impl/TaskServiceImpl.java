@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,39 +23,48 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task addTask(Task task, ToDo todo) {
-        List<Task> tasks = todo.getTasks();
-        tasks.add(task);
-        todo.setTasks(tasks);
-        return null;
+        todo.getTasks().add(task);
+        return todo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get();
     }
 
     public Task updateTask(Task task) {
-        // TODO
-        return null;
+        toDoService.getAll()
+                .forEach(toDo -> toDo.getTasks()
+                        .stream()
+                        .filter(task1 -> task1.getId() == task.getId())
+                        .forEach(task1 -> task1 = task));
+        final Task[] result = new Task[1];
+        toDoService.getAll().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task1 -> task1.getId() == task.getId()).findFirst().get());
+        return result[0];
     }
 
     public void deleteTask(Task task) {
-        // TODO
+        toDoService.getAll()
+                .forEach(toDo -> toDo.getTasks()
+                        .stream()
+                        .filter(task1 -> task1.getId() == task.getId())
+                        .forEach(task1 -> toDo.getTasks().remove(task1)));
     }
 
     public List<Task> getAll() {
-        // TODO
-        return null;
+        List<Task> result = new ArrayList<>();
+        toDoService.getAll()
+                .forEach(toDo -> result.addAll(toDo.getTasks()));
+        return result;
     }
 
     public List<Task> getByToDo(ToDo todo) {
-        // TODO
-        return null;
+        return todo.getTasks();
     }
 
     public Task getByToDoName(ToDo todo, String name) {
-        // TODO
-        return null;
+        return todo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get();
     }
 
     public Task getByUserName(User user, String name) {
-        // TODO
-        return null;
+        final Task[] result = new Task[1];
+        user.getMyTodos().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get());
+        return result[0];
     }
 
 }
