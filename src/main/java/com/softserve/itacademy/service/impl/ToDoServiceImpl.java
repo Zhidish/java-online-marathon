@@ -3,7 +3,6 @@ package com.softserve.itacademy.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.tools.javac.comp.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
