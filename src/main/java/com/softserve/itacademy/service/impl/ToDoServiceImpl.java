@@ -1,7 +1,9 @@
 package com.softserve.itacademy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.tools.javac.comp.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,32 +23,36 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     public ToDo addTodo(ToDo todo, User user) {
-        // TODO
-        return null;
+        user.getMyTodos().add(todo);
+        return todo;
     }
 
     public ToDo updateTodo(ToDo todo) {
-        // TODO
-        return null;
+        userService.getAll().forEach(s -> s.getMyTodos()
+                .stream().filter(h -> h.gitId() == todo.gitId()).forEach(todod -> todod = todo)
+
+        );
+
+        return todo;
     }
 
     public void deleteTodo(ToDo todo) {
-        // TODO
+        userService.getAll().forEach(s -> s.getMyTodos().remove(todo));
     }
 
     public List<ToDo> getAll() {
-        // TODO
-        return null;
+        List<ToDo> todoList=new ArrayList<>();
+        userService.getAll().forEach(s->s.getMyTodos().forEach(h->todoList.add(h)));
+        return todoList;
     }
 
     public List<ToDo> getByUser(User user) {
-        // TODO
-        return null;
+        return user.getMyTodos() ;
     }
 
     public ToDo getByUserTitle(User user, String title) {
-        // TODO
-        return null;
+      return   user.getMyTodos().stream().filter(ToDo->ToDo.getTitle().equals(title)).findFirst().get();
+
     }
 
 }
