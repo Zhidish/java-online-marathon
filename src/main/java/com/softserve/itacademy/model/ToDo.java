@@ -1,14 +1,24 @@
 package com.softserve.itacademy.model;
 
+import com.sun.tools.javac.comp.Todo;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 public class ToDo {
 
+
+    private int id;
+    private static int count;
     private String title;
 
     private LocalDateTime createdAt;
+
+    public int gitId(){
+        return  id;
+    }
+
 
     private User owner;
 
@@ -19,6 +29,7 @@ public class ToDo {
         this.createdAt = createdAt;
         this.owner = owner;
         this.tasks = tasks;
+        id = count++;
     }
 
     public String getTitle() {
@@ -55,16 +66,13 @@ public class ToDo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ToDo toDo = (ToDo) o;
-        return Objects.equals(title, toDo.title) && Objects.equals(createdAt, toDo.createdAt) && Objects.equals(owner, toDo.owner) && Objects.equals(tasks, toDo.tasks);
+        return this.id== ((ToDo)o).gitId();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(title, createdAt, owner, tasks);
     }
-    
+
 
 }
