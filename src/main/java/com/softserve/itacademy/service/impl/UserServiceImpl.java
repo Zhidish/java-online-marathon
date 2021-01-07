@@ -19,25 +19,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        // TODO
-        return null;
+        users.add(user);
+        return users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
     }
 
     @Override
     public User updateUser(User user) {
-        // TODO
-        return null;
+        users.stream()
+                .filter(user1 -> user1.getId() == user.getId())
+                .findFirst()
+                .ifPresent(user1 -> user1 = user);
+        return users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
     }
 
     @Override
     public void deleteUser(User user) {
-        // TODO
+        users.remove(user);
     }
 
     @Override
     public List<User> getAll() {
-        // TODO
-        return null;
+        return users;
     }
 
 }

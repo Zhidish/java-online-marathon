@@ -22,7 +22,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task addTask(Task task, ToDo todo) {
-        // TODO
+        List<Task> tasks = todo.getTasks();
+        tasks.add(task);
+        todo.setTasks(tasks);
         return null;
     }
 
