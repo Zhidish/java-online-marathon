@@ -53,7 +53,7 @@ public class TaskServiceTest {
         ToDo todo = new ToDo("Todo_1", LocalDateTime.now(), user, tasks);
         toDoList.add(todo);
         user.setMyTodos(toDoList);
-        toDoService.addTodo(todo, user);
+       toDoService.addTodo(todo, user);
 
         Field namefiled = taskService.getClass().getDeclaredField("toDoService");
 

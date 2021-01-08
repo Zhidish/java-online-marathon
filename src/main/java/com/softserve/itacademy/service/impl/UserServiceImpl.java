@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
+
         users.stream()
                 .filter(user1 -> user1.equals(user))
                 .findFirst()

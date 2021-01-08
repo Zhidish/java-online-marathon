@@ -37,6 +37,8 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = new ArrayList<>();
         toDoService.getAll().forEach(toDo -> tasks.addAll(toDo.getTasks()));
         return tasks.stream().filter(task1 -> task1.equals(task)).findAny().get();
+
+
     }
 
     public void deleteTask(Task task) {
