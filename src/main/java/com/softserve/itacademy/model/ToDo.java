@@ -1,11 +1,14 @@
 package com.softserve.itacademy.model;
 
-import com.sun.tools.javac.comp.Todo;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 public class ToDo {
 
 

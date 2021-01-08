@@ -50,8 +50,7 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     public ToDo getByUserTitle(User user, String title) {
-      return   user.getMyTodos().stream().filter(ToDo->ToDo.getTitle().equals(title)).findFirst().get();
-
+      return user.getMyTodos().stream().filter(ToDo->ToDo.getTitle().equals(title)).findFirst().get();
     }
 
 }

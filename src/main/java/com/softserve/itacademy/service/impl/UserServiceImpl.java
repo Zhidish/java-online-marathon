@@ -19,7 +19,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        users.add(user);
+        if (users.stream().noneMatch(user1 -> user1.equals(user))){
+            users.add(user);
+        }
+        //users.get(users.lastIndexOf(user))
         return users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
     }
 
