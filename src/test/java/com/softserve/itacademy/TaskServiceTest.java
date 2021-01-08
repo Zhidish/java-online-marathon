@@ -89,7 +89,7 @@ public class TaskServiceTest {
     public void checkDeleteTask() {
 
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
-        userService.addUser(user);
+
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         Task expected = new Task("Expected", Priority.HIGH);
@@ -97,30 +97,25 @@ public class TaskServiceTest {
         tasks.add(expected);
         tasks.add(new Task("Message_2", Priority.LOW));
         tasks.add(new Task("Message_3", Priority.HIGH));
+        tasks.add(new Task("Message_4", Priority.LOW));
+        tasks.add(new Task("Message_5", Priority.HIGH));
 
 
         ToDo todo = new ToDo("Todo_1", LocalDateTime.now(), user, tasks);
         toDoList.add(todo);
         user.setMyTodos(toDoList);
+        userService.addUser(user);
         taskService.deleteTask(expected);
-        AtomicBoolean actual = new AtomicBoolean(false);
 
-        taskService.getAll().forEach(task -> {
-                    if (task.equals(expected)) {
-                        actual.set(true);
-                    }
-
-                }
-
-        );
-
-        Assertions.assertEquals(false, actual.get());
-
-
+        Assertions.assertTrue(taskService.getAll().stream().noneMatch(task -> task.equals(expected)));
     }
 
     @Test
     public void checkGetAll() {
+        AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
+        userService = annotationConfigContext.getBean(UserService.class);
+        toDoService = annotationConfigContext.getBean(ToDoService.class);
+        taskService = annotationConfigContext.getBean(TaskService.class);
 
         List<Task> expected_tasks = new ArrayList<>();
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
@@ -138,8 +133,6 @@ public class TaskServiceTest {
         user.setMyTodos(toDoList);
         userService.addUser(user);
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
