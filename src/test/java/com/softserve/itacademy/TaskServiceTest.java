@@ -14,16 +14,20 @@ import com.softserve.itacademy.service.UserService;
 public class TaskServiceTest {
     private static UserService userService;
 
+
     @BeforeAll
     public static void setupBeforeClass() throws Exception {
         AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
         userService = annotationConfigContext.getBean(UserService.class);
+
+
+
         annotationConfigContext.close();
     }
 
     @Test
     public void checkAddTask() {
-        // TODO, code
+
     }
 
     // TODO, other tests

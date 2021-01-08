@@ -103,6 +103,12 @@ public class ToDoServiceTest {
 
     @Test
     public void getAllTodo() {
+
+        AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
+        userService = annotationConfigContext.getBean(UserService.class);
+        toDoService = annotationConfigContext.getBean(ToDoService.class);
+
+
         List<ToDo> expected = new ArrayList<>();
         User user = new User("Rostyslav", "Shynko", "longmail@gmail.com", "qwerty321", null);
         List<ToDo> toDoList = new ArrayList<>();
