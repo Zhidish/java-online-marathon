@@ -45,8 +45,7 @@ public class TaskServiceImpl implements TaskService {
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
-                        .filter(task1 -> task1.equals(task))
-                        .forEach(task1 -> toDo.getTasks().remove(task1)));
+                        .filter(task1 -> task1.equals(task)).findAny().ifPresent(task1 -> toDo.getTasks().remove(task1)));
     }
 
     public List<Task> getAll() {
