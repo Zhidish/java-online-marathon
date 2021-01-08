@@ -27,20 +27,21 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     public ToDo updateTodo(ToDo todo) {
-        userService.getAll().forEach(s -> s.getMyTodos()
-                .stream().filter(h -> h.getId() == todo.getId()).forEach(todod -> todod = todo)
+        userService.getAll().forEach(user -> user.getMyTodos()
+                .stream().filter(toDo -> toDo.equals(todo)).forEach(toDo -> toDo = todo)
         );
-
-        return todo;
+        List<ToDo> result = new ArrayList<>();
+        userService.getAll().forEach(user -> result.addAll(user.getMyTodos()));
+        return result.stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
     }
 
     public void deleteTodo(ToDo todo) {
-        userService.getAll().forEach(s -> s.getMyTodos().remove(todo));
+        userService.getAll().stream().filter(user -> user.getMyTodos().contains(todo)).forEach(s -> s.getMyTodos().remove(todo));
     }
 
     public List<ToDo> getAll() {
-        List<ToDo> todoList=new ArrayList<>();
-        userService.getAll().forEach(s->s.getMyTodos().forEach(h->todoList.add(h)));
+        List<ToDo> todoList = new ArrayList<>();
+        userService.getAll().forEach(s-> todoList.addAll(s.getMyTodos()));
         return todoList;
     }
 

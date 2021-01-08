@@ -28,14 +28,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task updateTask(Task task) {
+        System.out.println(task);
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
                         .filter(task1 -> task1.equals(task))
                         .forEach(task1 -> task1 = task));
-        final Task[] result = new Task[1];
-        toDoService.getAll().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get());
-        return result[0];
+        List<Task> tasks = new ArrayList<>();
+        toDoService.getAll().forEach(toDo -> tasks.addAll(toDo.getTasks()));
+        return tasks.stream().filter(task1 -> task1.equals(task)).findAny().get();
     }
 
     public void deleteTask(Task task) {

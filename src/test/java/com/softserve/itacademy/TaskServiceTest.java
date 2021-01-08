@@ -41,6 +41,7 @@ public class TaskServiceTest {
     public void checkAddTask() throws NoSuchFieldException, IllegalAccessException {
 
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Message_1", Priority.HIGH));
@@ -66,25 +67,16 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void updateTask(){
-
-
+    public void checkUpdateTask(){
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         Task expected = new Task("Expected", Priority.HIGH);
-
         tasks.add(expected);
-        tasks.add(new Task("Message_2", Priority.LOW));
-        tasks.add(new Task("Message_3", Priority.HIGH));
-
-
         ToDo todo = new ToDo("Todo_1", LocalDateTime.now(), user, tasks);
         toDoList.add(todo);
         user.setMyTodos(toDoList);
-        toDoService.addTodo(todo, user);
-
-
         expected.setName("Updated");
         Task actual = taskService.updateTask(expected);
         Assertions.assertEquals(expected, actual);
@@ -94,9 +86,10 @@ public class TaskServiceTest {
 
 
     @Test
-    public void deleteTask() {
+    public void checkDeleteTask() {
 
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         Task expected = new Task("Expected", Priority.HIGH);
@@ -109,7 +102,6 @@ public class TaskServiceTest {
         ToDo todo = new ToDo("Todo_1", LocalDateTime.now(), user, tasks);
         toDoList.add(todo);
         user.setMyTodos(toDoList);
-        toDoService.addTodo(todo, user);
         taskService.deleteTask(expected);
         AtomicBoolean actual = new AtomicBoolean(false);
 
@@ -128,12 +120,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void getAll() {
-        AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
-        userService = annotationConfigContext.getBean(UserService.class);
-        toDoService = annotationConfigContext.getBean(ToDoService.class);
-        taskService = annotationConfigContext.getBean(TaskService.class);
-
+    public void checkGetAll() {
 
         List<Task> expected_tasks = new ArrayList<>();
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
@@ -175,7 +162,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void getByTodo() {
+    public void checkGetByTodo() {
 
         List<Task> expected_tasks = new ArrayList<>();
 
@@ -196,7 +183,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void getByTodoName() {
+    public void checkGetByTodoName() {
 
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
@@ -217,7 +204,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void getByUserName() {
+    public void checkGetByUserName() {
 
 
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);

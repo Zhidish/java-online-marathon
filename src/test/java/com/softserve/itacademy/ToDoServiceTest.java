@@ -35,6 +35,7 @@ public class ToDoServiceTest {
     @Test
     public void checkAddToDo() {
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Message_1", Priority.HIGH));
@@ -47,14 +48,11 @@ public class ToDoServiceTest {
         Assertions.assertEquals(todo, expected);
     }
 
-    // TODO, other tests
-
 
     @Test
-    public void updateToDO() {
-
-
+    public void checkUpdateToDO() {
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Message_1", Priority.HIGH));
@@ -73,9 +71,10 @@ public class ToDoServiceTest {
 
 
     @Test
-    public void deleteToDo() {
+    public void checkDeleteToDo() {
 
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
+        userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Message_1", Priority.HIGH));
@@ -84,30 +83,17 @@ public class ToDoServiceTest {
         ToDo todo = new ToDo("Todo_1", LocalDateTime.now(), user, tasks);
         toDoList.add(todo);
         user.setMyTodos(toDoList);
-        toDoService.addTodo(todo, user);
         toDoService.deleteTodo(todo);
-        AtomicBoolean boolean_actual = new AtomicBoolean(false);
-        boolean expected = false;
-        toDoService.getAll().forEach(toDoList_1 -> {
-            if (toDoList_1.equals(todo)) {
-                boolean_actual.set(true);
-            }
-
-
-        });
-
-        Assertions.assertEquals(expected, boolean_actual.get());
+        Assertions.assertTrue(toDoService.getAll().stream().noneMatch(toDoList_1 -> toDoList_1.equals(todo)));
 
 
     }
 
     @Test
-    public void getAllTodo() {
-
+    public void checkGetAllTodo() {
         AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
         userService = annotationConfigContext.getBean(UserService.class);
         toDoService = annotationConfigContext.getBean(ToDoService.class);
-
 
         List<ToDo> expected = new ArrayList<>();
         User user = new User("Rostyslav", "Shynko", "longmail@gmail.com", "qwerty321", null);
@@ -151,7 +137,7 @@ public class ToDoServiceTest {
 
 
     @Test
-    public void getByUser() {
+    public void checkGetByUser() {
 
         List<ToDo> expected = new ArrayList<>();
         List<ToDo> actual = new ArrayList<>();
@@ -194,7 +180,7 @@ public class ToDoServiceTest {
 
 
     @Test
-    public void getByUserTitile() {
+    public void checkGetByUserTitle() {
 
 
         User user = new User("Rostyslav", "Shynko", "longmail@gmail.com", "qwerty321", null);
