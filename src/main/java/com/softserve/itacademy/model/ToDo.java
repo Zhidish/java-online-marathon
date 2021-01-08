@@ -14,11 +14,12 @@ public class ToDo {
 
     private int id;
     private static int count;
+
     private String title;
 
     private LocalDateTime createdAt;
 
-    public int gitId(){
+    public int getId(){
         return  id;
     }
 
@@ -32,7 +33,7 @@ public class ToDo {
         this.createdAt = createdAt;
         this.owner = owner;
         this.tasks = tasks;
-        id = count++;
+        this.id = count++;
     }
 
     public String getTitle() {
@@ -69,7 +70,7 @@ public class ToDo {
 
     @Override
     public boolean equals(Object o) {
-        return this.id== ((ToDo)o).gitId();
+        return this.id == ((ToDo)o).getId();
     }
 
     @Override

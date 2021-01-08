@@ -31,10 +31,10 @@ public class TaskServiceImpl implements TaskService {
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
-                        .filter(task1 -> task1.getId() == task.getId())
+                        .filter(task1 -> task1.equals(task))
                         .forEach(task1 -> task1 = task));
         final Task[] result = new Task[1];
-        toDoService.getAll().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task1 -> task1.getId() == task.getId()).findFirst().get());
+        toDoService.getAll().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get());
         return result[0];
     }
 
@@ -42,7 +42,7 @@ public class TaskServiceImpl implements TaskService {
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
-                        .filter(task1 -> task1.getId() == task.getId())
+                        .filter(task1 -> task1.equals(task))
                         .forEach(task1 -> toDo.getTasks().remove(task1)));
     }
 

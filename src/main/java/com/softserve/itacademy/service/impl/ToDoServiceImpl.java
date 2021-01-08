@@ -23,13 +23,12 @@ public class ToDoServiceImpl implements ToDoService {
 
     public ToDo addTodo(ToDo todo, User user) {
         user.getMyTodos().add(todo);
-        return todo;
+        return user.getMyTodos().stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
     }
 
     public ToDo updateTodo(ToDo todo) {
         userService.getAll().forEach(s -> s.getMyTodos()
-                .stream().filter(h -> h.gitId() == todo.gitId()).forEach(todod -> todod = todo)
-
+                .stream().filter(h -> h.getId() == todo.getId()).forEach(todod -> todod = todo)
         );
 
         return todo;
