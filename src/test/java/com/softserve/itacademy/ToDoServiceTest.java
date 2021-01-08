@@ -127,9 +127,9 @@ public class ToDoServiceTest {
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
         List<Task> tasks1 = new ArrayList<>();
-        tasks.add(new Task("Message_1", Priority.HIGH));
-        tasks.add(new Task("Message_2", Priority.LOW));
-        tasks.add(new Task("Message_3", Priority.HIGH));
+        tasks1.add(new Task("Message_1", Priority.HIGH));
+        tasks1.add(new Task("Message_2", Priority.LOW));
+        tasks1.add(new Task("Message_3", Priority.HIGH));
         ToDo todo1 = new ToDo("Todo_2", LocalDateTime.now(), user1, tasks1);
         toDoList1.add(todo1);
         expected.add(todo1);
@@ -176,9 +176,9 @@ public class ToDoServiceTest {
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
         List<Task> tasks1 = new ArrayList<>();
-        tasks.add(new Task("Message_1", Priority.HIGH));
-        tasks.add(new Task("Message_2", Priority.LOW));
-        tasks.add(new Task("Message_3", Priority.HIGH));
+        tasks1.add(new Task("Message_1", Priority.HIGH));
+        tasks1.add(new Task("Message_2", Priority.LOW));
+        tasks1.add(new Task("Message_3", Priority.HIGH));
         ToDo todo1 = new ToDo("Todo_2", LocalDateTime.now(), user1, tasks1);
         toDoList1.add(todo1);
         expected.add(todo1);
@@ -214,9 +214,9 @@ public class ToDoServiceTest {
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
         List<Task> tasks1 = new ArrayList<>();
-        tasks.add(new Task("Message_1", Priority.HIGH));
-        tasks.add(new Task("Message_2", Priority.LOW));
-        tasks.add(new Task("Message_3", Priority.HIGH));
+        tasks1.add(new Task("Message_1", Priority.HIGH));
+        tasks1.add(new Task("Message_2", Priority.LOW));
+        tasks1.add(new Task("Message_3", Priority.HIGH));
         ToDo todo1 = new ToDo("Todo_2", LocalDateTime.now(), user1, tasks1);
         expected = todo1;
         toDoList1.add(todo1);
