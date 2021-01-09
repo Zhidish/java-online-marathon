@@ -17,7 +17,6 @@ import com.softserve.itacademy.service.UserService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(JUnitPlatform.class)
 public class ToDoServiceTest {
@@ -127,8 +126,6 @@ public class ToDoServiceTest {
 
 
         Assertions.assertEquals(expected, actual);
-
-
     }
 
 
@@ -171,7 +168,6 @@ public class ToDoServiceTest {
         actual.addAll(toDoService.getByUser(user1));
 
         Assertions.assertEquals(expected, actual);
-
     }
 
 
@@ -210,7 +206,5 @@ public class ToDoServiceTest {
         actual = toDoService.getByUserTitle(user1, "Todo_2");
 
         Assertions.assertEquals(actual, expected);
-
-
     }
 }
