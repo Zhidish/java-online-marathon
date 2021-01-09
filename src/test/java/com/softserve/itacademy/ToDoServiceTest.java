@@ -65,14 +65,11 @@ public class ToDoServiceTest {
         todo.setTitle("Todo_update");
         ToDo expected = toDoService.updateTodo(todo);
         Assertions.assertEquals(expected, todo);
-
-
     }
 
 
     @Test
     public void checkDeleteToDo() {
-
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
@@ -85,7 +82,6 @@ public class ToDoServiceTest {
         user.setMyTodos(toDoList);
         toDoService.deleteTodo(todo);
         Assertions.assertTrue(toDoService.getAll().stream().noneMatch(toDoList_1 -> toDoList_1.equals(todo)));
-
 
     }
 

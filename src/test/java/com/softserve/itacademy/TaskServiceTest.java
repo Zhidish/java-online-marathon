@@ -18,7 +18,6 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(JUnitPlatform.class)
 public class TaskServiceTest {
@@ -39,7 +38,6 @@ public class TaskServiceTest {
 
     @Test
     public void checkAddTask() throws NoSuchFieldException, IllegalAccessException {
-
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         userService.addUser(user);
         List<ToDo> toDoList = new ArrayList<>();
@@ -87,7 +85,6 @@ public class TaskServiceTest {
 
     @Test
     public void checkDeleteTask() {
-
         User user = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
 
         List<ToDo> toDoList = new ArrayList<>();
@@ -156,7 +153,6 @@ public class TaskServiceTest {
 
     @Test
     public void checkGetByTodo() {
-
         List<Task> expected_tasks = new ArrayList<>();
 
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
@@ -170,14 +166,11 @@ public class TaskServiceTest {
         expected_tasks.addAll(tasks1);
         List<Task> actual_tasks = taskService.getByToDo(todo1);
         Assertions.assertEquals(expected_tasks, actual_tasks);
-
-
     }
 
 
     @Test
     public void checkGetByTodoName() {
-
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
         List<Task> tasks1 = new ArrayList<>();
@@ -189,17 +182,13 @@ public class TaskServiceTest {
         ToDo todo1 = new ToDo("Todo_2", LocalDateTime.now(), user1, tasks1);
         toDoList1.add(todo1);
         Task actual = taskService.getByToDoName(todo1, "Expected");
-
         Assertions.assertEquals(expected, actual);
-
 
     }
 
 
     @Test
     public void checkGetByUserName() {
-
-
         User user1 = new User("Pavlo", "Juice", "email@gmail.com", "qwerty123", null);
         List<ToDo> toDoList1 = new ArrayList<>();
         List<Task> tasks1 = new ArrayList<>();

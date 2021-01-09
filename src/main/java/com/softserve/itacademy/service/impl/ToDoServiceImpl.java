@@ -28,8 +28,6 @@ public class ToDoServiceImpl implements ToDoService {
         result = user.getMyTodos().stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
         System.out.println(todo.toString() + " added");
         return result;
-
-
     }
 
     public ToDo updateTodo(ToDo todo) {
@@ -69,8 +67,6 @@ public class ToDoServiceImpl implements ToDoService {
         result = user.getMyTodos().stream().filter(ToDo -> ToDo.getTitle().equals(title)).findFirst().get();
         System.out.println("result todo " + result.toString());
         return user.getMyTodos().stream().filter(ToDo -> ToDo.getTitle().equals(title)).findFirst().get();
-
-
     }
 
 }
