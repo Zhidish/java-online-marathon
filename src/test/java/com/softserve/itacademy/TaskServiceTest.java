@@ -31,8 +31,6 @@ public class TaskServiceTest {
         userService = annotationConfigContext.getBean(UserService.class);
         toDoService = annotationConfigContext.getBean(ToDoService.class);
         taskService = annotationConfigContext.getBean(TaskService.class);
-
-
         annotationConfigContext.close();
     }
 
@@ -60,8 +58,6 @@ public class TaskServiceTest {
         Task actual = taskService.addTask(expected, todo);
 
         Assertions.assertEquals(actual, expected);
-
-
     }
 
     @Test
@@ -78,8 +74,6 @@ public class TaskServiceTest {
         expected.setName("Updated");
         Task actual = taskService.updateTask(expected);
         Assertions.assertEquals(expected, actual);
-
-
     }
 
 
@@ -147,7 +141,6 @@ public class TaskServiceTest {
         List<Task> actual_list = taskService.getAll();
 
         Assertions.assertEquals(expected_tasks, actual_list);
-
     }
 
 
@@ -183,7 +176,6 @@ public class TaskServiceTest {
         toDoList1.add(todo1);
         Task actual = taskService.getByToDoName(todo1, "Expected");
         Assertions.assertEquals(expected, actual);
-
     }
 
 
@@ -203,7 +195,6 @@ public class TaskServiceTest {
 
         Task actual = taskService.getByUserName(user1, "Expected");
         Assertions.assertEquals(expected, actual);
-
     }
 
 
