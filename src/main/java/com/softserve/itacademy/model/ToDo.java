@@ -11,7 +11,6 @@ import java.util.Objects;
 @Scope("prototype")
 public class ToDo {
 
-
     private int id;
     private static int count;
 
@@ -22,7 +21,6 @@ public class ToDo {
     public int getId(){
         return  id;
     }
-
 
     private User owner;
 
@@ -82,6 +80,5 @@ public class ToDo {
     public int hashCode() {
         return Objects.hash(title, createdAt, owner, tasks);
     }
-
 
 }
