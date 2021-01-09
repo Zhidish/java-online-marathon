@@ -45,6 +45,11 @@ public class Task {
     }
 
     @Override
+    public String toString() {
+        return "User" + this.id + " (" + this.name +")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         return this.getId() == ((Task) o).getId();
     }

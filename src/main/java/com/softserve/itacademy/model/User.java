@@ -79,6 +79,11 @@ public class User {
     }
 
     @Override
+    public String toString() {
+        return "User" + this.id + " (" + this.email +")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         return this.id == ((User)o).getId();
     }

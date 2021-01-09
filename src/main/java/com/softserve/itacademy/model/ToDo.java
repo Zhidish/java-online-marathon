@@ -69,6 +69,11 @@ public class ToDo {
     }
 
     @Override
+    public String toString() {
+        return "User" + this.id + " (" + this.title +")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         return this.id == ((ToDo)o).getId();
     }

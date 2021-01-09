@@ -22,52 +22,52 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     public ToDo addTodo(ToDo todo, User user) {
-        ToDo toDo1 = null;
-        System.out.println("incoming todo id  in addTodo() " + todo.getId());
+        ToDo result;
+        System.out.println("adding " + todo.toString());
         user.getMyTodos().add(todo);
-
-
-        toDo1 = user.getMyTodos().stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
-        System.out.println("outcoming todo id in addToDo " +toDo1.getId());
-        return user.getMyTodos().stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
+        result = user.getMyTodos().stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
+        System.out.println(todo.toString() + " added");
+        return result;
 
 
     }
 
     public ToDo updateTodo(ToDo todo) {
-        ToDo todo_1=null;
-        System.out.println("incoming todo id  in updateToDo() "+ todo.getId());
+        ToDo todo_result;
+        System.out.println("updating " + todo.toString());
         userService.getAll().forEach(user -> user.getMyTodos()
                 .stream().filter(toDo -> toDo.equals(todo)).forEach(toDo -> toDo = todo)
         );
         List<ToDo> result = new ArrayList<>();
         userService.getAll().forEach(user -> result.addAll(user.getMyTodos()));
-
-               todo_1= result.stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
-        System.out.println("outcoming todo id "+ todo_1.getId());
-        return result.stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
+        todo_result= result.stream().filter(toDo -> toDo.equals(todo)).findFirst().get();
+        System.out.println(todo.toString() + " updated");
+        return todo_result;
     }
 
     public void deleteTodo(ToDo todo) {
+        System.out.println("deleting " + todo.toString());
         userService.getAll().stream().filter(user -> user.getMyTodos().contains(todo)).forEach(s -> s.getMyTodos().remove(todo));
+        System.out.println(todo.toString() + " deleted");
     }
 
     public List<ToDo> getAll() {
-
+        System.out.println("getting all todo`s");
         List<ToDo> todoList = new ArrayList<>();
         userService.getAll().forEach(s -> todoList.addAll(s.getMyTodos()));
         return todoList;
     }
 
     public List<ToDo> getByUser(User user) {
+        System.out.println("getting todo`s by user");
         return user.getMyTodos();
     }
 
     public ToDo getByUserTitle(User user, String title) {
-        ToDo todo1 = null ;
-        System.out.println("need to find ToDo with such title "+ title );
-        todo1= user.getMyTodos().stream().filter(ToDo -> ToDo.getTitle().equals(title)).findFirst().get();
-        System.out.println("outcoming todo with title "+ todo1.getTitle() );
+        ToDo result;
+        System.out.println("getting user todo`s by title");
+        result = user.getMyTodos().stream().filter(ToDo -> ToDo.getTitle().equals(title)).findFirst().get();
+        System.out.println("result todo " + result.toString());
         return user.getMyTodos().stream().filter(ToDo -> ToDo.getTitle().equals(title)).findFirst().get();
 
 

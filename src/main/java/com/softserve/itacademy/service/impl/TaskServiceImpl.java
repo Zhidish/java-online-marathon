@@ -23,19 +23,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task addTask(Task task, ToDo todo) {
-        Task task_1 = null;
-        System.out.println("incoming  task id in addTask() " + task.getId());
+        Task result;
+        System.out.println("adding " + task.toString());
         todo.getTasks().add(task);
-
-        task_1 = todo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get();
-        System.out.println("outcoming task id " + task_1.getId());
-        return todo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get();
+        result = todo.getTasks().stream().filter(task1 -> task1.equals(task)).findFirst().get();
+        System.out.println(task.toString() + " added");
+        return result;
     }
 
     public Task updateTask(Task task) {
-        Task updatingTask = null;
-        System.out.println("incoming task id in updatetask() " + task.getId());
-
+        Task result;
+        System.out.println("updating " + task.toString());
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
@@ -43,21 +41,23 @@ public class TaskServiceImpl implements TaskService {
                         .forEach(task1 -> task1 = task));
         List<Task> tasks = new ArrayList<>();
         toDoService.getAll().forEach(toDo -> tasks.addAll(toDo.getTasks()));
-        updatingTask = tasks.stream().filter(task1 -> task1.equals(task)).findAny().get();
-        System.out.println("outcoming task id " + updatingTask.getId());
-
-        return tasks.stream().filter(task1 -> task1.equals(task)).findAny().get();
+        result = tasks.stream().filter(task1 -> task1.equals(task)).findAny().get();
+        System.out.println(result.toString() + " updated");
+        return result;
 
     }
 
     public void deleteTask(Task task) {
+        System.out.println("deleting " + task.toString());
         toDoService.getAll()
                 .forEach(toDo -> toDo.getTasks()
                         .stream()
                         .filter(task1 -> task1.equals(task)).findAny().ifPresent(task1 -> toDo.getTasks().remove(task1)));
+        System.out.println(task.toString() + " deleted");
     }
 
     public List<Task> getAll() {
+        System.out.println("getting all tasks");
         List<Task> result = new ArrayList<>();
         toDoService.getAll()
                 .forEach(toDo -> result.addAll(toDo.getTasks()));
@@ -65,26 +65,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public List<Task> getByToDo(ToDo todo) {
+        System.out.println("getting all tasks of " + todo.toString());
         return todo.getTasks();
     }
 
     public Task getByToDoName(ToDo todo, String name) {
-        Task task_1 = null;
-        System.out.println("incoming name of task in getByDoName() " + name);
-
-
-        task_1 = todo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get();
-        System.out.println("outcoming task name " + task_1.getName());
-        return todo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get();
+        Task result;
+        System.out.println("getting task " + name + " in " + todo.toString());
+        result = todo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get();
+        System.out.println(result.toString() + "got");
+        return result;
     }
 
     public Task getByUserName(User user, String name) {
-        Task task_1 = null;
-
-        System.out.println("incoming name of task in getByUserName " + name);
+        System.out.println("getting task " + name + " in " + user.toString());
         final Task[] result = new Task[1];
         user.getMyTodos().forEach(toDo -> result[0] = toDo.getTasks().stream().filter(task -> task.getName().equals(name)).findFirst().get());
-        System.out.println("outcoming name  of task " + result[0].getName());
+        System.out.println(result[0].toString() + "got");
         return result[0];
     }
 

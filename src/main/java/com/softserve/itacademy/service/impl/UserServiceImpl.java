@@ -19,47 +19,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        System.out.println("incoming user id in addUser() " + user.getId());
-
+        System.out.println("adding " + user.toString());
         if (users.stream().noneMatch(user1 -> user1.equals(user))) {
             users.add(user);
+            System.out.println(user.toString() + " added");
         }
         //users.get(users.lastIndexOf(user))
-
-        User user_1 = users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
-        System.out.println(" returning user id " + user_1.getId());
-
         return users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
     }
 
     @Override
     public User updateUser(User user) {
-        User user2 = null;
-        System.out.println("incoming user id in updateUser() " + user.getId());
+        User result;
+        System.out.println("updating " + user.toString());
         users.stream()
                 .filter(user1 -> user1.equals(user))
                 .findFirst()
                 .ifPresent(user1 -> user1 = user);
-
-
-        user2 = users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
-        System.out.println("outcoming user id   " + user2.getId());
-        return users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
-
-
+        result = users.stream().filter(user1 -> user1.equals(user)).findFirst().get();
+        System.out.println(user.toString() + " updated");
+        return result;
     }
 
     @Override
     public void deleteUser(User user) {
-
+        System.out.println("deleting " + user.toString());
         users.remove(user);
-
-
+        System.out.println(user.toString() + " deleted");
     }
 
     @Override
     public List<User> getAll() {
-
+        System.out.println("getting all users");
         return users;
     }
 

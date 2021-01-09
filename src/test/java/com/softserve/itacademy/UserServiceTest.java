@@ -23,7 +23,6 @@ public class UserServiceTest {
         AnnotationConfigApplicationContext annotationConfigContext = new AnnotationConfigApplicationContext(Config.class);
         userService = annotationConfigContext.getBean(UserService.class);
         annotationConfigContext.close();
-
     }
 
     @Test
