@@ -4,12 +4,35 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+import java.util.Objects;
 
 @Component
 @Scope("prototype")
 public class User {
 
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private String password;
+
+    private int id;
+
+    private static int counter;
+
+
+    private List<ToDo> myTodos;
+
+    public User(String firstName, String lastName, String email, String password, List<ToDo> myTodos) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.myTodos = myTodos;
+        this.id = counter++;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -51,16 +74,23 @@ public class User {
         this.myTodos = myTodos;
     }
 
-    private String firstName;
+    public int getId(){
+        return id;
+    }
 
-    private String lastName;
+    @Override
+    public String toString() {
+        return "User" + this.id + " (" + this.email +")";
+    }
 
-    private String email;
+    @Override
+    public boolean equals(Object o) {
+        return this.id == ((User)o).getId();
+    }
 
-    private String password;
-
-    private List<ToDo> myTodos;
-
-    // Constructor(s), getters, setters, hashCode, equals, etc.
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, email, password, myTodos);
+    }
 
 }

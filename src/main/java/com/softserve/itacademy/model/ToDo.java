@@ -1,25 +1,41 @@
 package com.softserve.itacademy.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Objects;
 
 @Component
-@Scope("Prototype")
+@Scope("prototype")
 public class ToDo {
-    public String getTitle() {
-        return title;
+
+    private int id;
+    private static int count;
+
+    private String title;
+
+    private LocalDateTime createdAt;
+
+    public int getId(){
+        return  id;
     }
+
+    private User owner;
+
+    private List<Task> tasks;
 
     public ToDo(String title, LocalDateTime createdAt, User owner, List<Task> tasks) {
         this.title = title;
         this.createdAt = createdAt;
         this.owner = owner;
         this.tasks = tasks;
+        this.id = count++;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
@@ -50,14 +66,19 @@ public class ToDo {
         this.tasks = tasks;
     }
 
-    private String title;
+    @Override
+    public String toString() {
+        return "User" + this.id + " (" + this.title +")";
+    }
 
-    private LocalDateTime createdAt;
+    @Override
+    public boolean equals(Object o) {
+        return this.id == ((ToDo)o).getId();
+    }
 
-    private User owner;
-
-    private List<Task> tasks;
-
-    // Constructor(s), getters, setters, hashCode, equals, etc.
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, createdAt, owner, tasks);
+    }
 
 }
