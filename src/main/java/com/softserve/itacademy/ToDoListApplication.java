@@ -39,7 +39,7 @@ public class ToDoListApplication implements CommandLineRunner {
 
         Role role = roleRepository.getOne(2L);
         User validUser  = new User();
-        validUser.setEmail("valid@cv.edu.ua");
+        validUser.setEmail("valid@cv.edu.uaa");
         validUser.setFirstName("Valid-Name");
         validUser.setLastName("Valid-Name");
         validUser.setPassword("qwQW12!@");
@@ -52,7 +52,7 @@ public class ToDoListApplication implements CommandLineRunner {
         toDo.setOwner(validUser);
         toDo = toDoRepository.save(toDo);
 
-        LocalDate localDate = toDo.getCreatedAt().toLocalDate();
+        LocalDate localDate = toDo.getCreated_at().toLocalDate();
         LocalDate today = LocalDate.now();
         System.out.println(localDate.equals(today));
 
