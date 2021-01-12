@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -17,6 +18,10 @@ import java.util.Set;
 @Entity
 @Table(name = "todos")
 public class ToDo {
+    public ToDo() {
+        created_at = LocalDateTime.now();
+
+    }
 
     public long getId() {
         return id;
@@ -57,7 +62,7 @@ public class ToDo {
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
                     @Parameter(name = "sequence_name", value = "ToDo_sequence"),
-                    @Parameter(name = "initial_value", value = "1"),
+                    @Parameter(name = "initial_value", value = "20"),
                     @Parameter(name = "increment_size", value = "1")
 
 
@@ -66,8 +71,8 @@ public class ToDo {
     )
     private long id;
 
-    @NotBlank(message = "The roleName cannot be empty")
-    @Column(name = "created_at",nullable = false)
+
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime created_at;
 
 
