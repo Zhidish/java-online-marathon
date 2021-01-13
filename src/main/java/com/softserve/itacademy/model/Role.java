@@ -5,11 +5,23 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 
     @Id
     @GeneratedValue(generator = "sequence-generator")
@@ -17,8 +29,8 @@ public class Role {
             name = "sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @Parameter(name = "sequence_name", value = "role_sequence"),
-                    @Parameter(name = "initial_value", value = "10"),
+                    @Parameter(name = "sequence_name", value = "roles_sequence"),
+                    @Parameter(name = "initial_value", value = "3"),
                     @Parameter(name = "increment_size", value = "1")
             }
     )
@@ -28,8 +40,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
-/*    @OneToMany(mappedBy = "roles")
-    private List<User> users;*/
+    @OneToMany(mappedBy = "roles")
+    private List<User> users=new ArrayList<>();
 
     public Role() {
     }

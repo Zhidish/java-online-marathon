@@ -47,12 +47,12 @@ public class ToDo {
         this.title = title;
     }
 
-    public long getOwner_id() {
-        return owner_id;
+    public User getOwner_id() {
+        return owner;
     }
 
     public void setOwner(User user) {
-        this.owner_id = user.getId();
+        this.owner = user;
     }
 
     @Id
@@ -81,7 +81,9 @@ public class ToDo {
     private String title;
 
 
-    @JoinColumn
-    private long owner_id;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id",referencedColumnName = "id")
+    private User owner;
 
 }

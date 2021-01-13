@@ -8,12 +8,41 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name = "users")
 public class User {
+    public Role getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Role roles) {
+        this.roles = roles;
+    }
+
+    public List<ToDo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<ToDo> todos) {
+        this.todos = todos;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
     public long getId() {
         return id;
     }
@@ -62,6 +91,15 @@ public class User {
         this.roles .add(role);
     }*/
 
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role roles;
+
+    @OneToMany(mappedBy = "owner")
+    private List<ToDo> todos=new ArrayList<>();
+
+
     @Id
     @GeneratedValue(generator = "sequence-generator")
     @GenericGenerator(
@@ -69,16 +107,20 @@ public class User {
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
                     @Parameter(name = "sequence_name", value = "user_sequence"),
-                    @Parameter(name = "initial_value", value = "3"),
+                    @Parameter(name = "initial_value", value = "10"),
                     @Parameter(name = "increment_size", value = "1")
             }
     )
     private long id;
-
+    @Email
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false, unique = true)
     private String email;
-
+    /*
+        @Pattern(
+                regexp = "^[\\w!#$%&'*+/=?{|}~^-]+(?:\\.[\\w!#$%&'*+/=?{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$",
+                message = "invalid nameghdftgjhdrytujdcr6yi"
+        )*/
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false)
     private String first_name;
@@ -96,14 +138,17 @@ public class User {
     /*  @OneToMany(mappedBy = "roles")
       List<Role> roles;
   */
-    @JoinColumn
+   /* @Column(name = "role_id")
     private long role_id;
 
     public long getRole() {
         return role_id;
     }
+*/
 
     public void setRole(Role role) {
-        this.role_id = role.getId();
+        roles = role;
     }
+
+
 }

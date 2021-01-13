@@ -36,7 +36,6 @@ public class ToDoListApplication implements CommandLineRunner {
         System.out.println("Running Spring Boot Application");
 
 
-
         Role role = roleRepository.getOne(2L);
         User validUser  = new User();
         validUser.setEmail("valid@cv.edu.uaa");
