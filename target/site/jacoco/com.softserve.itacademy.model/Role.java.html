@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Role.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToDoList</a> &gt; <a href="index.source.html" class="el_package">com.softserve.itacademy.model</a> &gt; <span class="el_source">Role.java</span></div><h1>Role.java</h1><pre class="source lang-java linenums">package com.softserve.itacademy.model;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;roles&quot;)
+public class Role {
+    public void setId(long id) {
+<span class="nc" id="L18">        this.id = id;</span>
+<span class="nc" id="L19">    }</span>
+
+    public List&lt;User&gt; getUsers() {
+<span class="nc" id="L22">        return users;</span>
+    }
+
+    public void setUsers(List&lt;User&gt; users) {
+<span class="nc" id="L26">        this.users = users;</span>
+<span class="nc" id="L27">    }</span>
+
+    @Id
+    @GeneratedValue(generator = &quot;sequence-generator&quot;)
+    @GenericGenerator(
+            name = &quot;sequence-generator&quot;,
+            strategy = &quot;org.hibernate.id.enhanced.SequenceStyleGenerator&quot;,
+            parameters = {
+                    @Parameter(name = &quot;sequence_name&quot;, value = &quot;roles_sequence&quot;),
+                    @Parameter(name = &quot;initial_value&quot;, value = &quot;3&quot;),
+                    @Parameter(name = &quot;increment_size&quot;, value = &quot;1&quot;)
+            }
+    )
+    private long id;
+
+    @NotNull(message = &quot;The roleName cannot be null&quot;)
+    @NotBlank(message = &quot;The roleName cannot be empty&quot;)
+    @Size(min = 2,max = 254,message = &quot;The length of roleName should be &gt;2 &amp;&amp; &lt;255&quot;)
+    @Pattern(regexp = &quot;^[A-Za-z]+((\\s)?([A-Za-z])+)*$&quot;, message = &quot;wrong name format&quot;)
+    @Column(nullable = false, unique = true)
+    private String name;
+
+<span class="nc" id="L49">    @OneToMany(mappedBy = &quot;roles&quot;)</span>
+    private List&lt;User&gt; users=new ArrayList&lt;&gt;();
+
+<span class="nc" id="L52">    public Role() {</span>
+<span class="nc" id="L53">    }</span>
+
+    public long getId() {
+<span class="nc" id="L56">        return id;</span>
+    }
+
+    public String getName() {
+<span class="nc" id="L60">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L64">        this.name = name;</span>
+<span class="nc" id="L65">    }</span>
+/*
+    public List&lt;User&gt; getUsers() {
+        return users;
+    }
+
+    public void setUsers(List&lt;User&gt; users) {
+        this.users = users;
+    }*/
+
+    @Override
+    public String toString() {
+<span class="nc" id="L77">        return &quot;Role {&quot; +</span>
+                &quot;id = &quot; + id +
+                &quot;, name = '&quot; + name + '\'' +
+                &quot;} &quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
