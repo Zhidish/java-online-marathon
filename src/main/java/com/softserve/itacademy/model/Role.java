@@ -5,6 +5,9 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,10 @@ public class Role {
     )
     private long id;
 
+    @NotNull(message = "The roleName cannot be null")
     @NotBlank(message = "The roleName cannot be empty")
+    @Size(min = 2,max = 254,message = "The length of roleName should be >2 && <255")
+    @Pattern(regexp = "^[A-Za-z]+((\\s)?([A-Za-z])+)*$", message = "wrong name format")
     @Column(nullable = false, unique = true)
     private String name;
 
