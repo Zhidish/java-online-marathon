@@ -96,8 +96,9 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role roles;
 
+
     @OneToMany(mappedBy = "owner")
-    private List<ToDo> todos=new ArrayList<>();
+    private List<ToDo> todos = new ArrayList<>();
 
 
     @Id
@@ -116,21 +117,28 @@ public class User {
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false, unique = true)
     private String email;
-    /*
-        @Pattern(
-                regexp = "^[\\w!#$%&'*+/=?{|}~^-]+(?:\\.[\\w!#$%&'*+/=?{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$",
-                message = "invalid nameghdftgjhdrytujdcr6yi"
-        )*/
+
+    @Pattern(
+            regexp = "[A-Z][a-z]+-([A-Z][a-z]+)",
+            message = "invalid  firstName"
+    )
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false)
     private String first_name;
 
-
+    @Pattern(
+            regexp = "[A-Z][a-z]+-([A-Z][a-z]+)",
+            message = "invalid  lastName"
+    )
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false)
     private String last_name;
 
-
+@Pattern(
+regexp= "^(?=.*?[A-Z])(?=(.*[a-z])+)(?=(.*[\\d])+)(?=(.*[\\W])+)(?!.*\\s).{8,}$",
+message ="use at least one number,letter in apper case,letter in lower case,and  one \n" +
+        "special character"
+)
     @NotBlank(message = "The roleName cannot be empty")
     @Column(nullable = false)
     private String password;
