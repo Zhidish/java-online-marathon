@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -25,9 +26,10 @@ public class State {
     )
     private long id;
 
+    @NotEmpty
     @NotBlank(message = "The 'name' cannot be empty")
     @Column(nullable = false, unique = true)
-    @Pattern(regexp = "[ \\w]{1,20}", message = "Only latin symbols, numbers, dash, space and underscore are allowed")
+    @Pattern(regexp = "^[-\\w\\s]{1,20}$", message = "Only latin symbols, numbers, dash, space and underscore are allowed")
     private String name;
 
     @OneToMany(mappedBy = "state")

@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "users")
 public class User  {
 
-    private static final String NAME_REGEXP = "[A-Z][a-z]+(-[A-Z][a-z]+){0,1}";
+    private static final String NAME_REGEXP = "^([-]?[A-Z][a-z]+)+$";
 
     @Id
     @GeneratedValue(generator = "sequence-generator")
@@ -28,11 +28,13 @@ public class User  {
     )
     private long id;
 
+    @NotBlank
     @Pattern(regexp = NAME_REGEXP,
             message = "Must start with a capital letter followed by one or more lowercase letters")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @NotBlank
     @Pattern(regexp = NAME_REGEXP,
             message = "Must start with a capital letter followed by one or more lowercase letters")
     @Column(name = "last_name", nullable = false)
@@ -43,6 +45,7 @@ public class User  {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?$\\.&]{8,}$",
             message = "Must be minimum 8 characters, at least one uppercase, one lowercase, one number and one special character")
     @Column(nullable = false)

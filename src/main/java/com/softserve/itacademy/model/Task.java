@@ -3,6 +3,7 @@ package com.softserve.itacademy.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -26,6 +27,7 @@ public class Task {
     @Size(min=3, max=200)
     private String name;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Priority priority;
 

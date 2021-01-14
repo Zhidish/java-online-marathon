@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,7 @@ public class ToDo {
     )
     private long id;
 
+    @NotEmpty
     @NotBlank(message = "The title cannot be empty")
     @Column(nullable = false)
     private String title;
