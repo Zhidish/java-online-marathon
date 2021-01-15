@@ -64,31 +64,28 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(User user) {
 
-
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
 
         user = (User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", user.getId()).getSingleResult();
 
-        System.err.println(user.getEmail());
-        System.err.println(user.getId());
-        System.err.println(user.getMyTodos().get(0).getOwner().getId());
-       user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
-      session.getTransaction().commit();
+        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId()).executeUpdate();
 
-//
-//        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId());
-//
-//
-//        session.createQuery("DELETE ToDo todo  WHERE todo.owner.id=:id")
-//                .setParameter("id", user.getId()).executeUpdate();
-//
-//
-//        session.createQuery("DELETE User user  WHERE user.id=:id")
-//                .setParameter("id", user.getId()).executeUpdate();
+        user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
 
 
+        session.createQuery("DELETE ToDo todo  WHERE todo.owner.id=:id")
+                .setParameter("id", user.getId()).executeUpdate();
+
+
+        session.createQuery("DELETE User user  WHERE user.id=:id")
+                .setParameter("id", user.getId()).executeUpdate();
+
+
+
+        session.getTransaction().commit();
         session.close();
+
 
 
     }

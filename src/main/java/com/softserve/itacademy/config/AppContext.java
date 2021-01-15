@@ -21,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Configuration
 @Transactional
 public class AppContext {
-@Autowired
+
     static StandardServiceRegistry registry;
-@Autowired
+
     static SessionFactory sessionFactory;
 
-    @Bean
+
  public  SessionFactory getSessionFactory() {
 
         if (sessionFactory == null) {
