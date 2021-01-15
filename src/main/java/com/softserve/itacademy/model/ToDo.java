@@ -33,6 +33,7 @@ public class ToDo {
     private String title;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne

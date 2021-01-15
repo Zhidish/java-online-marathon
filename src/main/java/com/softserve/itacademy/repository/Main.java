@@ -23,16 +23,16 @@ public class Main {
         roleReposetoryimpl.deleteById(5L);
 
         roleReposetoryimpl.save(role);
-
-        System.out.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
 */
+      /*  System.out.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
+*/
+System.err.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
 
-
-        System.out.println(userRepositoryImpl.findAll().toString());
+     /*   System.out.println(userRepositoryImpl.findAll().toString());*/
 
         User user = new User();
         user.setId(4);
-      userRepositoryImpl.delete(user);
+        userRepositoryImpl.delete(user);
 
     }
 }

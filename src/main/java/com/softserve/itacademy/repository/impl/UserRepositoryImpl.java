@@ -73,7 +73,10 @@ public class UserRepositoryImpl implements UserRepository {
         System.err.println(user.getEmail());
         System.err.println(user.getId());
         System.err.println(user.getMyTodos().get(0).getOwner().getId());
-//        user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()));
+       user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
+      session.getTransaction().commit();
+
+//
 //        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId());
 //
 //
@@ -102,6 +105,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public <S extends User> S save(S s) {
+
+        Session  session = sessionFactory.openSession();
+
         return null;
     }
 
