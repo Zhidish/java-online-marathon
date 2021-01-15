@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
 //        session.createQuery("DELETE User user  WHERE user.id=:id")
 //                .setParameter("id", user.getId()).executeUpdate();
 
-        session.getTransaction().commit();
+
         session.close();
 
 
