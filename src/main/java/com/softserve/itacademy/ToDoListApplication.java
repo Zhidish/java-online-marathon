@@ -28,10 +28,6 @@ public class ToDoListApplication implements CommandLineRunner {
         System.out.println("Running Spring Boot Application");
 
         System.out.println(taskService.getByTodoId(7L));
-
-
-
-
     }
 }
 

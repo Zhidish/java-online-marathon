@@ -31,7 +31,7 @@ public class Main {
         System.out.println(userRepositoryImpl.findAll().toString());
 
         User user = new User();
-        user.setEmail("nick@mail.com");
+        user.setId(4);
       userRepositoryImpl.delete(user);
 
     }

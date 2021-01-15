@@ -2,6 +2,7 @@ package com.softserve.itacademy.repository.impl;
 
 import com.softserve.itacademy.config.AppContext;
 import com.softserve.itacademy.model.Role;
+import com.softserve.itacademy.model.ToDo;
 import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.repository.UserRepository;
 import org.hibernate.Session;
@@ -65,20 +66,23 @@ public class UserRepositoryImpl implements UserRepository {
 
 
         Session session = sessionFactory.getCurrentSession();
+        session.getTransaction().begin();
 
+        user = (User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", user.getId()).getSingleResult();
 
-        long id = getUserByEmail(user).getId();
-
-
-        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + getUserByEmail(user).getId());
-
-
-        session.createQuery("DELETE ToDo todo  WHERE todo.owner.email=:email")
-                .setParameter("email", user.getEmail()).executeUpdate();
-
-
-        session.createQuery("DELETE User user  WHERE user.email=:email ")
-                .setParameter("email", user.getEmail()).executeUpdate();
+        System.err.println(user.getEmail());
+        System.err.println(user.getId());
+        System.err.println(user.getMyTodos().get(0).getOwner().getId());
+//        user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()));
+//        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId());
+//
+//
+//        session.createQuery("DELETE ToDo todo  WHERE todo.owner.id=:id")
+//                .setParameter("id", user.getId()).executeUpdate();
+//
+//
+//        session.createQuery("DELETE User user  WHERE user.id=:id")
+//                .setParameter("id", user.getId()).executeUpdate();
 
         session.getTransaction().commit();
         session.close();
