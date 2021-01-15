@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
+
 
         List<User> users = (List<User>) session.createQuery("from User ").list();
 
@@ -63,12 +63,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void delete(User user) {
-
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
-
-        user = (User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", user.getId()).getSingleResult();
-
+        user = findById(user.getId()).get();
         session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId()).executeUpdate();
 
         user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
@@ -115,7 +112,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(Long aLong) {
-        return Optional.empty();
+        return Optional.of((User)sessionFactory.getCurrentSession().createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
     }
 
     @Override
