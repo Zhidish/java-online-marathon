@@ -1,14 +1,18 @@
 package com.softserve.itacademy.repository;
 
 import com.softserve.itacademy.model.Role;
+import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.repository.impl.RoleRepositoryImpl;
+import com.softserve.itacademy.repository.impl.UserRepositoryImpl;
 
 public class Main {
 
 
     public static void main(String[] args) {
         RoleRepositoryImpl roleReposetoryimpl = new RoleRepositoryImpl();
-        System.out.println(roleReposetoryimpl.findAll().toString());
+        UserRepository userRepositoryImpl = new UserRepositoryImpl();
+
+        /*System.out.println(roleReposetoryimpl.findAll().toString());
 
 
         System.out.println(roleReposetoryimpl.getOne(1L).toString());
@@ -21,6 +25,14 @@ public class Main {
         roleReposetoryimpl.save(role);
 
         System.out.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
+*/
+
+
+        System.out.println(userRepositoryImpl.findAll().toString());
+
+        User user = new User();
+        user.setEmail("nick@mail.com");
+      userRepositoryImpl.delete(user);
 
     }
 }

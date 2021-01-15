@@ -42,7 +42,7 @@ public class RoleRepositoryImpl implements RoleRepository {
         System.out.println(session.isOpen());
         List<Role> roles = (List<Role>) session.createQuery("from Role ").list();
         session.close();
-
+        session.getTransaction().commit();
         return roles;
 
 
