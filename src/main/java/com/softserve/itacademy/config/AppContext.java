@@ -15,9 +15,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Configuration
+@Transactional
 public class AppContext {
 @Autowired
     static StandardServiceRegistry registry;
@@ -25,19 +27,20 @@ public class AppContext {
     static SessionFactory sessionFactory;
 
     @Bean
-   SessionFactory getSessionFactory() {
+ public  SessionFactory getSessionFactory() {
 
         if (sessionFactory == null) {
             try {
                 registry = new StandardServiceRegistryBuilder()
-                        .configure("src/main/resources/hibernate.cfg.xml")
+                        .configure("hibernate.cfg.xml")
                         .build();
+
                 Metadata metadata = new MetadataSources(registry)
                         .addAnnotatedClass(Role.class)
                         .addAnnotatedClass(State.class)
                         .addAnnotatedClass(Task.class)
                         .addAnnotatedClass(ToDo.class)
-                        .addAnnotatedClass(User.class).buildMetadata();
+                        .addAnnotatedClass(User.class).getMetadataBuilder().build();
 
                 sessionFactory = metadata.getSessionFactoryBuilder().build();
             } catch (Exception e) {
