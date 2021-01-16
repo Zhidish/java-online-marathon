@@ -13,7 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +61,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteById(Long aLong) {
+        User user = new User();
+        user.setId(aLong);
+        delete(user);
+
 
     }
 
@@ -79,10 +86,8 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("id", user.getId()).executeUpdate();
 
 
-
         session.getTransaction().commit();
         session.close();
-
 
 
     }
@@ -100,9 +105,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public <S extends User> S save(S s) {
 
-        Session  session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.save(s);
+        session.getTransaction().commit();
 
-        return null;
+        return (S) findById(s.getId()).get();
     }
 
     @Override
@@ -112,12 +120,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(Long aLong) {
-        return Optional.of((User)sessionFactory.getCurrentSession().createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
+        Session session = sessionFactory.getCurrentSession();
+
+        session.getTransaction().begin();
+        Optional<User> user = Optional.of((User) sessionFactory.getCurrentSession().createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
+        session.getTransaction().commit();
+        return user;
     }
 
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        return findById(aLong).isPresent();
+
+
     }
 
     @Override
@@ -189,4 +204,24 @@ public class UserRepositoryImpl implements UserRepository {
         return user1;
 
     }
+
+    @Override
+    public User updateUser(User user) {
+
+        Session session = sessionFactory.openSession();
+        System.err.println(user.getId());
+        session.getTransaction().begin();
+    Query query=    session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
+                .setParameter("firstName", user.getFirstName())
+                .setParameter("lastName", user.getLastName())
+                .setParameter("email", user.getEmail())
+                .setParameter("password", user.getPassword())
+                .setParameter("id", user.getId());
+        System.err.println(query.executeUpdate());
+        session.getTransaction().commit();
+session.close();
+
+        return getOne(user.getId());
+    }
+
 }

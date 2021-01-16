@@ -24,15 +24,26 @@ public class Main {
 
         roleReposetoryimpl.save(role);
 */
-      /*  System.out.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
-*/
+        /*  System.out.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
+         */
 //System.err.println(  roleReposetoryimpl.getAllRolesByUsers().toString());
 
-     /*   System.out.println(userRepositoryImpl.findAll().toString());*/
+        /*   System.out.println(userRepositoryImpl.findAll().toString());*/
 
         User user = new User();
-        user.setId(4);
-        userRepositoryImpl.delete(user);
+        user.setId(11L);
+        user.setFirstName("Rostya");
+        user.setLastName("Shynko");
+        user.setEmail("doublelongword@gmail.com");
+        user.setRole(roleReposetoryimpl.getOne(1L));
+        user.setPassword("$2a$10$CdEJ2PKXgUCIwU4pDQWICuiPjxb1lysoX7jrN");
+
+        // userRepositoryImpl.delete(user);
+
+        //  userRepositoryImpl.deleteById(5L);
+        //  userRepositoryImpl.save(user);
+        user.setFirstName("BoyNextDoor");
+            userRepositoryImpl.updateUser(user);
 
     }
 }
