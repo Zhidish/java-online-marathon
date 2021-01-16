@@ -27,11 +27,16 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll() throws NullPointerException {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
+        List<User> users = null;
+        try {
+            users = (List<User>) session.createQuery("from User ").list();
+        } catch (NoResultException e) {
 
-        List<User> users = (List<User>) session.createQuery("from User ").list();
+
+        }
         session.getTransaction().commit();
         session.close();
 
@@ -55,8 +60,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public long count() {
+        try {
+            return findAll().size();
+        } catch (NullPointerException e) {
 
-        return findAll().size();
+
+            return 0;
+        }
+
     }
 
     @Override
@@ -73,17 +84,20 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
         user = findById(user.getId()).get();
-        session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId()).executeUpdate();
+        try {
+            session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId()).executeUpdate();
 
-        user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
-
-
-        session.createQuery("DELETE ToDo todo  WHERE todo.owner.id=:id")
-                .setParameter("id", user.getId()).executeUpdate();
+            user.getMyTodos().forEach(toDo -> session.createSQLQuery("DELETE from tasks WHERE todo_id= " + toDo.getId()).executeUpdate());
 
 
-        session.createQuery("DELETE User user  WHERE user.id=:id")
-                .setParameter("id", user.getId()).executeUpdate();
+            session.createQuery("DELETE ToDo todo  WHERE todo.owner.id=:id")
+                    .setParameter("id", user.getId()).executeUpdate();
+
+
+            session.createQuery("DELETE User user  WHERE user.id=:id")
+                    .setParameter("id", user.getId()).executeUpdate();
+        } catch (Exception e) {
+        }
 
 
         session.getTransaction().commit();
@@ -109,10 +123,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public <S extends User> S save(S s) {
-        if(existsById(s.getId())){
+        if (existsById(s.getId())) {
             updateUser(s);
 
-        }else {
+        } else {
             Session session = sessionFactory.openSession();
             session.getTransaction().begin();
             session.save(s);
@@ -128,11 +142,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findById(Long aLong) {
+    public Optional<User> findById(Long aLong) throws NullPointerException {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-
-        Optional<User> user = Optional.of((User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
+        Optional<User> user = null;
+        try {
+            user = Optional.of((User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
+        } catch (NoResultException e) {
+        }
         session.getTransaction().commit();
         session.close();
         return user;
@@ -140,7 +157,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        return findById(aLong).isPresent();
+        try {
+            return findById(aLong).isPresent();
+        } catch (NullPointerException e) {
+            return false;
+        }
 
 
     }
@@ -167,12 +188,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getOne(Long aLong) {
-         return findById(aLong).get();
+        try {
+            return findById(aLong).get();
+        } catch (NullPointerException e) {
+            return null;
 
-
-
-
-
+        }
 
     }
 
@@ -207,14 +228,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserByEmail(User user) {
+    public User getUserByEmail(User user) throws NullPointerException {
         if (user == null) {
             return null;
         }
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
-        User user1 = (User) session.createQuery("SELECT user FROM User user where user=:email").setParameter("email", user.getEmail()).getSingleResult();
-        System.out.println(user1.getId());
+        User user1 = null;
+        try {
+            user1 = (User) session.createQuery("SELECT user FROM User user where user=:email").setParameter("email", user.getEmail()).getSingleResult();
+        } catch (NoResultException e) {
+        }
+
         session.getTransaction().commit();
         session.close();
         return user1;
@@ -225,15 +250,20 @@ public class UserRepositoryImpl implements UserRepository {
     public User updateUser(User user) {
 
         Session session = sessionFactory.openSession();
-        System.err.println(user.getId());
+
+
         session.getTransaction().begin();
-        Query query = session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
-                .setParameter("firstName", user.getFirstName())
-                .setParameter("lastName", user.getLastName())
-                .setParameter("email", user.getEmail())
-                .setParameter("password", user.getPassword())
-                .setParameter("id", user.getId());
-        System.err.println(query.executeUpdate());
+        try {
+            Query query = session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
+                    .setParameter("firstName", user.getFirstName())
+                    .setParameter("lastName", user.getLastName())
+                    .setParameter("email", user.getEmail())
+                    .setParameter("password", user.getPassword())
+                    .setParameter("id", user.getId());
+        } catch (Exception e) {
+
+
+        }
         session.getTransaction().commit();
         session.close();
 

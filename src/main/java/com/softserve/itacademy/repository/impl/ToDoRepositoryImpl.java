@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +25,17 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public List<ToDo> findAll() {
+        List<ToDo> toDos = null;
+
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
 
-        List<ToDo> toDos;
-        toDos = session.createQuery("from  ToDo ").list();
-
+        try {
+            toDos = session.createQuery("from  ToDo ").list();
+        }catch(NoResultException e ){}
         session.getTransaction().commit();
         session.close();
+
         return toDos;
 
 
@@ -59,22 +63,26 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public void deleteById(Long aLong) {
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        session.createSQLQuery(String.format("DELETE from todo_collaborator where todo_id=%d ", aLong)).executeUpdate();
+        try {
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
+            session.createSQLQuery(String.format("DELETE from todo_collaborator where todo_id=%d ", aLong)).executeUpdate();
 
 
-        session.createQuery("DELETE FROM Task task where task.toDo.id=:id")
-                .setParameter("id", aLong).executeUpdate();
+            session.createQuery("DELETE FROM Task task where task.toDo.id=:id")
+                    .setParameter("id", aLong).executeUpdate();
 
 
-        session.createQuery("DELETE from ToDo where id=:id ")
-                .setParameter("id", aLong).
-                executeUpdate();
+            session.createQuery("DELETE from ToDo where id=:id ")
+                    .setParameter("id", aLong).
+                    executeUpdate();
 
-        session.getTransaction().commit();
-        session.close();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
 
+
+        }
 
     }
 
@@ -91,20 +99,24 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     @Override
     public void deleteAll() {
         Session session = sessionFactory.getCurrentSession();
-        findAll().forEach(toDo -> delete(toDo));
+        try {
+            findAll().forEach(toDo -> delete(toDo));
+        } catch (NullPointerException e) {
 
+
+        }
 
     }
 
     @Override
     public <S extends ToDo> S save(S s) {
-        if(existsById(s.getId())){
+        if (existsById(s.getId())) {
             try {
                 updateToDo(s);
-            }catch(Exception e ){
+            } catch (Exception e) {
 
             }
-        }else {
+        } else {
 
             Session session = sessionFactory.openSession();
             session.getTransaction().begin();
@@ -122,15 +134,15 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     }
 
     @Override
-    public Optional<ToDo> findById(Long aLong) {
+    public Optional<ToDo> findById(Long aLong) throws NullPointerException {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<ToDo> toDoOptional=null;
+        Optional<ToDo> toDoOptional = null;
         try {
-             toDoOptional = Optional.of((ToDo) session.createQuery("SELECT toDo FROM ToDo  toDo where toDo.id=:id")
+            toDoOptional = Optional.of((ToDo) session.createQuery("SELECT toDo FROM ToDo  toDo where toDo.id=:id")
                     .setParameter("id", aLong).getSingleResult());
-        }catch (Exception e ){
+        } catch (Exception e) {
 
 
         }
@@ -143,9 +155,13 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        return findById(aLong).isPresent();
 
+        try {
+            return findById(aLong).isPresent();
+        } catch (Exception e) {
 
+        }
+        return false;
     }
 
     @Override
@@ -170,9 +186,13 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public ToDo getOne(Long aLong) {
-
-        return findById(aLong).get();
+        try {
+            return findById(aLong).get();
+        }catch(NullPointerException e ){
+            return null;
+        }
     }
+
 
     @Override
     public <S extends ToDo> Optional<S> findOne(Example<S> example) {
@@ -206,37 +226,43 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public void updateToDo(ToDo todo) {
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        System.err.println(todo.getOwner().getId());
-        System.err.println(todo.getId());
-        System.err.println(todo.getId());
 
-        Query query = session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
-                .setParameter("owner", todo.getOwner())
-                .setParameter("createdAt", todo.getCreatedAt())
-                .setParameter("title", todo.getTitle())
-                .setParameter("id", todo.getId());
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
 
-        query.executeUpdate();
+            try {
+            Query query = session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
+                    .setParameter("owner", todo.getOwner())
+                    .setParameter("createdAt", todo.getCreatedAt())
+                    .setParameter("title", todo.getTitle())
+                    .setParameter("id", todo.getId());
 
-        session.getTransaction().commit();
-        session.close();
+            query.executeUpdate();
+            } catch (Exception e) {
+
+
+            }
+
+            session.getTransaction().commit();
+            session.close();
 
 
     }
 
     @Override
     public List<ToDo> getAllByUser(User user) {
+        List<ToDo> toDos = null;
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        List<ToDo> toDos = session.createQuery("FROM ToDo todo  where  todo.owner.id=:id")
-                .setParameter("id", user.getId()).list();
+        try {
+            toDos = session.createQuery("FROM ToDo todo  where  todo.owner.id=:id")
+                    .setParameter("id", user.getId()).list();
+        } catch (NoResultException e) {
 
+        }
         session.getTransaction().commit();
         session.close();
         return toDos;
-
 
     }
 }

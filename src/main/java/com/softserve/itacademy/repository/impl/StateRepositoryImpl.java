@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.NoResultException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,15 @@ public class StateRepositoryImpl implements StateRepository {
     static SessionFactory sessionFactory = new AppContext().getSessionFactory();
 
     @Override
-    public List<State> findAll() {
+    public List<State> findAll() throws NullPointerException {
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
+        List<State> state = null;
 
-        List<State> state = session.createQuery("FROM  State ").list();
-
+        try {
+            state = session.createQuery("FROM  State ").list();
+        } catch (NoResultException e) {
+        }
         return state;
     }
 
@@ -45,17 +49,23 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public long count() {
+        try {
+            return findAll().size();
+        } catch (NullPointerException e) {
+            return 0;
 
-        return findAll().size();
+        }
     }
 
     @Override
     public void deleteById(Long aLong) {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        session.createQuery("DELETE  Task task  WHERE task.state.id=:id").setParameter("id", aLong).executeUpdate();
-        session.createQuery("DELETE State  state WHERE state.id=:id").setParameter("id", aLong).executeUpdate();
-
+        try {
+            session.createQuery("DELETE  Task task  WHERE task.state.id=:id").setParameter("id", aLong).executeUpdate();
+            session.createQuery("DELETE State  state WHERE state.id=:id").setParameter("id", aLong).executeUpdate();
+        } catch (Exception e) {
+        }
         session.getTransaction().commit();
         session.close();
 
@@ -97,13 +107,19 @@ public class StateRepositoryImpl implements StateRepository {
     }
 
     @Override
-    public Optional<State> findById(Long aLong) {
+    public Optional<State> findById(Long aLong) throws NullPointerException {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<State> state = Optional.of(
-                (State) session.createQuery("SELECT state1 FROM State state1 where state1.id=:id").setParameter("id", aLong).getSingleResult()
-        );
+        Optional<State> state = null;
+        try {
+            state = Optional.of(
+                    (State) session.createQuery("SELECT state1 FROM State state1 where state1.id=:id").setParameter("id", aLong).getSingleResult()
+            );
+        } catch (NoResultException e) {
+
+
+        }
 
         session.getTransaction().commit();
         session.close();
@@ -139,7 +155,12 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public State getOne(Long aLong) {
-        return findById(aLong).get();
+        try {
+            return findById(aLong).get();
+        }catch(NullPointerException e ){
+
+            return null;
+        }
     }
 
     @Override
@@ -176,7 +197,9 @@ public class StateRepositoryImpl implements StateRepository {
     public void updateState(State state) {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        session.createQuery("UPDATE State SET name= " + state.getName()).executeUpdate();
+        try {
+            session.createQuery("UPDATE State SET name= " + state.getName()).executeUpdate();
+        }catch (Exception e ){}
         session.getTransaction().commit();
         session.close();
 
@@ -188,7 +211,10 @@ public class StateRepositoryImpl implements StateRepository {
         Session session = sessionFactory.openSession();
 
         session.getTransaction().begin();
-        State state = (State) session.createQuery("FROM State where name=" + name).getSingleResult();
+        State state=null;
+        try {
+            state = (State) session.createQuery("FROM State where name=" + name).getSingleResult();
+        }catch(NoResultException e ){}
         session.getTransaction().commit();
         session.close();
 

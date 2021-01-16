@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.NoResultException;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +21,14 @@ public class TaskRepositoryImpl implements TaskRepository {
     static SessionFactory sessionFactory = new AppContext().getSessionFactory();
 
     @Override
-    public List<Task> findAll() {
+    public List<Task> findAll() throws NullPointerException {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
+        List<Task> tasks =null;
+        try {
+            tasks = session.createQuery("FROM Task ").list();
+        }catch(NoResultException e ){}
 
-        List<Task> tasks = session.createQuery("FROM Task ").list();
         session.getTransaction().commit();
         session.close();
         return tasks;
@@ -47,8 +52,13 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public long count() {
+        try {
+            return findAll().size();
+        }catch(NullPointerException e ){
 
-        return findAll().size();
+            return 0;
+
+        }
     }
 
     @Override
@@ -56,8 +66,11 @@ public class TaskRepositoryImpl implements TaskRepository {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        session.createQuery("DELETE FROM Task task where task.id=:id")
-                .setParameter("id", aLong).executeUpdate();
+        try {
+            session.createQuery("DELETE FROM Task task where task.id=:id")
+                    .setParameter("id", aLong).executeUpdate();
+        }catch(Exception e ){}
+
         session.getTransaction().commit();
         session.close();
 
@@ -99,13 +112,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Optional<Task> findById(Long aLong) {
+    public Optional<Task> findById(Long aLong) throws NullPointerException{
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<Task> task = Optional.of(
-                (Task) session.createQuery("SELECT Task FROM Task task where task.id=:id")
-                        .setParameter("id", aLong));
-
+        Optional<Task> task=null;
+                try {
+                    task = Optional.of(
+                            (Task) session.createQuery("SELECT Task FROM Task task where task.id=:id")
+                                    .setParameter("id", aLong));
+                }catch (NoResultException e ){}
         session.getTransaction().commit();
         session.close();
         return task;
@@ -113,7 +128,15 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+
+        try {
+           return findById(aLong).isPresent();
+        }catch(NullPointerException e ){
+
+            return false;
+        }
+
+
     }
 
     @Override
@@ -138,7 +161,12 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task getOne(Long aLong) {
-        return findById(aLong).get();
+        try {
+            return findById(aLong).get();
+        }catch(NullPointerException e ){
+
+            return null;
+        }
 
     }
 
@@ -177,22 +205,26 @@ public class TaskRepositoryImpl implements TaskRepository {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        session.createQuery("UPDATE Task SET state=:state, name=:name,priority=:priority")
-                .setParameter("state", task.getState())
-                .setParameter("name", task.getName())
-                .setParameter("priority", task.getPriority()).executeUpdate();
-
+        try {
+            session.createQuery("UPDATE Task SET state=:state, name=:name,priority=:priority")
+                    .setParameter("state", task.getState())
+                    .setParameter("name", task.getName())
+                    .setParameter("priority", task.getPriority()).executeUpdate();
+        }catch (Exception e ){}
         session.getTransaction().commit();
         session.close();
 
     }
 
     @Override
-    public List<Task> getTasksByToDoId(Long aLong) {
+    public List<Task> getTasksByToDoId(Long aLong) throws NullPointerException {
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
-        List<Task> tasks = session.createQuery("SELECT task FROM Task task where task.toDo.id=:toDoId")
-                .setParameter("toDoId", aLong).list();
+        List<Task> tasks=null;
+        try {
+            tasks = session.createQuery("SELECT task FROM Task task where task.toDo.id=:toDoId")
+                    .setParameter("toDoId", aLong).list();
+        }catch ( NoResultException e ){}
         session.getTransaction().commit();
         session.close();
         return tasks;

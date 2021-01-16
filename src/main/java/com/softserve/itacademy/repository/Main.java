@@ -62,7 +62,8 @@ public class Main {
        // toDoRepository.updateToDo(toDo);
     //    userRepositoryImpl.deleteAll();
 
-        toDoRepository.deleteAll();
+
+      roleReposetoryimpl.deleteAll();
 
     }
 }
