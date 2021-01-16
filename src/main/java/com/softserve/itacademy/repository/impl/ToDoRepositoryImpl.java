@@ -193,13 +193,15 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     public void updateToDo(ToDo todo) {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
+        System.err.println(todo.getOwner().getId());
         System.err.println(todo.getId());
-     Query query= session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,    owner=:owner, tasks=:tasks where title='Mike`s To-Do #1'")
+        System.err.println(todo.getId());
+
+     Query query= session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
                 .setParameter("owner", todo.getOwner())
                 .setParameter("createdAt",todo.getCreatedAt())
-                .setParameter("tasks", todo.getTasks())
-              /*  .setParameter("title", todo.getTitle())*/
-               /* .setParameter("id", todo.getId())*/;
+                .setParameter("title", todo.getTitle())
+                .setParameter("id", todo.getId());
 
      query.executeUpdate();
 
