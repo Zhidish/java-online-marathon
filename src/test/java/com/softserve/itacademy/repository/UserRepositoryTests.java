@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,54 +26,56 @@ public class UserRepositoryTests {
     UserRepository userRepository;
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCreateUser() {
         User user = new User();
-        user.setEmail("valid2@cv.edu.ua");
+        user.setEmail("valid2@gmail.ua");
         user.setFirstName("Create");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
-        long test_id = new Double(Math.random()*100).longValue();
-        user.setId(test_id);
         user = userRepository.save(user);
-        assertEquals(test_id, user.getId());
+        long expectedId = user.getId();
+        assertEquals(expectedId, user.getId());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteUserByUser(){
         User user = new User();
-        long test_id = new Double(Math.random()*100).longValue();
         user.setEmail("valid2@cv.edu.ua");
         user.setFirstName("Delete");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
-        user.setId(test_id);
         user = userRepository.save(user);
         userRepository.delete(user);
         assertFalse(userRepository.existsById(user.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteUserById(){
         User user = new User();
-        long test_id = new Double(Math.random()*100).longValue();
         user.setEmail("valid2@cv.edu.ua");
         user.setFirstName("Dellete");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
-        user.setId(test_id);
         user = userRepository.save(user);
-        assertEquals(test_id, user.getId());
+        long expectedId = user.getId();
+        assertEquals(expectedId, user.getId());
         userRepository.deleteById(user.getId());
         assertFalse(userRepository.existsById(user.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteAllUsers(){
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             user.setEmail("valid2@cv.edu.ua");
             user.setFirstName("Deletell");
             user.setLastName("Users");
             user.setPassword("qwQW12!@");
-            user.setId(test_id);
             userRepository.save(user);
         }
         assertEquals(userRepository.count(), 10);
@@ -81,42 +85,42 @@ public class UserRepositoryTests {
         assertEquals(userRepository.findAll().size(), 0);
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkExistsUser(){
         User user = new User();
-        long test_id = new Double(Math.random()*100).longValue();
         user.setEmail("valid2@cv.edu.ua");
         user.setFirstName("Existed");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
-        user.setId(test_id);
         userRepository.save(user);
         assertTrue(userRepository.findAll().stream().anyMatch(user1 -> user1.getId() == user.getId()));
         assertTrue(userRepository.existsById(user.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkFindUser(){
         User user = new User();
-        long test_id = new Double(Math.random()*100).longValue();
         user.setEmail("valid2@cv.edu.ua");
         user.setFirstName("Found");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
-        user.setId(test_id);
         userRepository.save(user);
         assertTrue(userRepository.findAll().stream().anyMatch(user1 -> user1.getId() == user.getId()));
         assertEquals(user, userRepository.findById(user.getId()).get());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkReturnAll(){
         List<User> expectedUsers = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             user.setEmail("valid2@cv.edu.ua");
             user.setFirstName("Returned");
             user.setLastName("User");
             user.setPassword("qwQW12!@");
-            user.setId(test_id);
             userRepository.save(user);
             expectedUsers.add(user);
         }
@@ -125,16 +129,16 @@ public class UserRepositoryTests {
         assertEquals(expectedUsers, userRepository.findAll());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCounter(){
         Set<User> expectedUsers = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             user.setEmail("valid2@cv.edu.ua");
             user.setFirstName("Counter");
             user.setLastName("User");
             user.setPassword("qwQW12!@");
-            user.setId(test_id);
             userRepository.save(user);
             expectedUsers.add(user);
         }
@@ -143,12 +147,10 @@ public class UserRepositoryTests {
         assertEquals(userRepository.findAll().size(), expectedUsers.size());
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             user.setEmail("valid2@cv.edu.ua");
             user.setFirstName("Counter");
             user.setLastName("User");
             user.setPassword("qwQW12!@");
-            user.setId(test_id);
             userRepository.save(user);
             expectedUsers.add(user);
         }

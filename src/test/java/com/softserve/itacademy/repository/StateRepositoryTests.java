@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,42 +26,44 @@ public class StateRepositoryTests {
     StateRepository stateRepository;
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCreateState() {
         State state = new State();
         state.setName("StateCreate");
-        long test_id = new Double(Math.random()*100).longValue();
-        state.setId(test_id);
         state = stateRepository.save(state);
-        assertEquals(test_id, state.getId());
+        long expectedId = state.getId();
+        assertEquals(expectedId, state.getId());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteStateByState(){
         State state = new State();
-        long test_id = new Double(Math.random()*100).longValue();
         state.setName("StateDelete");
-        state.setId(test_id);
         state = stateRepository.save(state);
         stateRepository.delete(state);
         assertFalse(stateRepository.existsById(state.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteStateById(){
         State state = new State();
-        long test_id = new Double(Math.random()*100).longValue();
         state.setName("StateDeleteByID");
-        state.setId(test_id);
         state = stateRepository.save(state);
-        assertEquals(test_id, state.getId());
+        long expectedId = state.getId();
+        assertEquals(expectedId, state.getId());
         stateRepository.deleteById(state.getId());
         assertFalse(stateRepository.existsById(state.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteAllStates(){
         for (int i = 0; i < 10; i++) {
             State state = new State();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             state.setName("StateDelete" + i);
-            state.setId(test_id);
             stateRepository.save(state);
         }
         assertEquals(stateRepository.count(), 10);
@@ -69,33 +73,33 @@ public class StateRepositoryTests {
         assertEquals(stateRepository.findAll().size(), 0);
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkExistsState(){
         State state = new State();
-        long test_id = new Double(Math.random()*100).longValue();
         state.setName("StateExists");
-        state.setId(test_id);
         stateRepository.save(state);
         assertTrue(stateRepository.findAll().stream().anyMatch(state1 -> state1.getId() == state.getId()));
         assertTrue(stateRepository.existsById(state.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkFindState(){
         State state = new State();
-        long test_id = new Double(Math.random()*100).longValue();
         state.setName("StateFind");
-        state.setId(test_id);
         stateRepository.save(state);
         assertTrue(stateRepository.findAll().stream().anyMatch(state1 -> state1.getId() == state.getId()));
         assertEquals(state, stateRepository.findById(state.getId()).get());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkReturnAll(){
         List<State> expectedStates = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             State state = new State();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             state.setName("State" + i);
-            state.setId(test_id);
             stateRepository.save(state);
             expectedStates.add(state);
         }
@@ -104,24 +108,13 @@ public class StateRepositoryTests {
         assertEquals(expectedStates, stateRepository.findAll());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCounter(){
         Set<State> expectedStates = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             State state = new State();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             state.setName("State" + i);
-            state.setId(test_id);
-            stateRepository.save(state);
-            expectedStates.add(state);
-        }
-        assertEquals(stateRepository.count(), stateRepository.findAll().size(), expectedStates.size());
-        assertEquals(stateRepository.count(), expectedStates.size());
-        assertEquals(stateRepository.findAll().size(), expectedStates.size());
-        for (int i = 0; i < 10; i++) {
-            State state = new State();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
-            state.setName("State" + i*10);
-            state.setId(test_id);
             stateRepository.save(state);
             expectedStates.add(state);
         }

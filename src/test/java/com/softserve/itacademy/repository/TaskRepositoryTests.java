@@ -4,11 +4,13 @@ import com.softserve.itacademy.model.Priority;
 import com.softserve.itacademy.model.Task;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,46 +26,48 @@ public class TaskRepositoryTests {
     TaskRepository taskRepository;
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCreateTask() {
         Task task = new Task();
         task.setName("TaskCreate");
         task.setPriority(Priority.MEDIUM);
-        long test_id = new Double(Math.random()*100).longValue();
-        task.setId(test_id);
         task = taskRepository.save(task);
-        assertEquals(test_id, task.getId());
+        long expectedId = task.getId();
+        assertEquals(expectedId, task.getId());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteTaskByTask(){
         Task task = new Task();
-        long test_id = new Double(Math.random()*100).longValue();
         task.setName("TaskDelete");
         task.setPriority(Priority.MEDIUM);
-        task.setId(test_id);
         task = taskRepository.save(task);
         taskRepository.delete(task);
         assertFalse(taskRepository.existsById(task.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteTaskById(){
         Task task = new Task();
-        long test_id = new Double(Math.random()*100).longValue();
         task.setName("TaskDeleteByID");
         task.setPriority(Priority.MEDIUM);
-        task.setId(test_id);
         task = taskRepository.save(task);
-        assertEquals(test_id, task.getId());
+        long expectedId = task.getId();
+        assertEquals(expectedId, task.getId());
         taskRepository.deleteById(task.getId());
         assertFalse(taskRepository.existsById(task.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkDeleteAllTasks(){
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             task.setName("TaskDelete" + i);
             task.setPriority(Priority.MEDIUM);
-            task.setId(test_id);
             taskRepository.save(task);
         }
         assertEquals(taskRepository.count(), 10);
@@ -73,36 +77,36 @@ public class TaskRepositoryTests {
         assertEquals(taskRepository.findAll().size(), 0);
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkExistsTask(){
         Task task = new Task();
-        long test_id = new Double(Math.random()*100).longValue();
         task.setName("TaskExists");
         task.setPriority(Priority.MEDIUM);
-        task.setId(test_id);
         taskRepository.save(task);
         assertTrue(taskRepository.findAll().stream().anyMatch(task1 -> task1.getId() == task.getId()));
         assertTrue(taskRepository.existsById(task.getId()));
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkFindTask(){
         Task task = new Task();
-        long test_id = new Double(Math.random()*100).longValue();
         task.setName("TaskFind");
         task.setPriority(Priority.MEDIUM);
-        task.setId(test_id);
         taskRepository.save(task);
         assertTrue(taskRepository.findAll().stream().anyMatch(task1 -> task1.getId() == task.getId()));
         assertEquals(task, taskRepository.findById(task.getId()).get());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkReturnAll(){
         List<Task> expectedTasks = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             task.setName("Task" + i);
             task.setPriority(Priority.MEDIUM);
-            task.setId(test_id);
             taskRepository.save(task);
             expectedTasks.add(task);
         }
@@ -111,14 +115,14 @@ public class TaskRepositoryTests {
         assertEquals(expectedTasks, taskRepository.findAll());
     }
     @Test
+    @Transactional
+    @DirtiesContext
     public void checkCounter(){
         Set<Task> expectedTasks = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             task.setName("Task" + i);
             task.setPriority(Priority.MEDIUM);
-            task.setId(test_id);
             taskRepository.save(task);
             expectedTasks.add(task);
         }
@@ -127,10 +131,8 @@ public class TaskRepositoryTests {
         assertEquals(taskRepository.findAll().size(), expectedTasks.size());
         for (int i = 0; i < 10; i++) {
             Task task = new Task();
-            long test_id = new Double(Math.random()*100*(i+1)).longValue();
             task.setName("Task" + i*10);
             task.setPriority(Priority.MEDIUM);
-            task.setId(test_id);
             taskRepository.save(task);
             expectedTasks.add(task);
         }

@@ -29,6 +29,8 @@ public class StateRepositoryImpl implements StateRepository {
             state = session.createQuery("FROM  State ").list();
         } catch (NoResultException e) {
         }
+        session.getTransaction().commit();
+        session.close();
         return state;
     }
 
@@ -53,7 +55,6 @@ public class StateRepositoryImpl implements StateRepository {
             return findAll().size();
         } catch (NullPointerException e) {
             return 0;
-
         }
     }
 
@@ -97,6 +98,8 @@ public class StateRepositoryImpl implements StateRepository {
             Session session = sessionFactory.openSession();
             session.getTransaction().begin();
             session.save(s);
+            session.getTransaction().commit();
+            session.close();
         }
         return (S) findById(s.getId()).get();
     }
@@ -111,7 +114,7 @@ public class StateRepositoryImpl implements StateRepository {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<State> state = null;
+        Optional<State> state = Optional.empty();
         try {
             state = Optional.of(
                     (State) session.createQuery("SELECT state1 FROM State state1 where state1.id=:id").setParameter("id", aLong).getSingleResult()
@@ -128,9 +131,7 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-
         return findById(aLong).isPresent();
-
     }
 
     @Override

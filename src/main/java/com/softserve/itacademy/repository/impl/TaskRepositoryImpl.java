@@ -115,11 +115,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     public Optional<Task> findById(Long aLong) throws NullPointerException{
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<Task> task=null;
+        Optional<Task> task = Optional.empty();
                 try {
                     task = Optional.of(
-                            (Task) session.createQuery("SELECT Task FROM Task task where task.id=:id")
-                                    .setParameter("id", aLong));
+                            (Task) session.createQuery("SELECT task FROM Task task where task.id=:Id")
+                                    .setParameter("Id", aLong).getSingleResult());
                 }catch (NoResultException e ){}
         session.getTransaction().commit();
         session.close();
