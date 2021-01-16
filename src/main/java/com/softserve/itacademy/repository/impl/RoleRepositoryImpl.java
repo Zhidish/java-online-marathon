@@ -41,8 +41,8 @@ public class RoleRepositoryImpl implements RoleRepository {
         session.beginTransaction();
         System.out.println(session.isOpen());
         List<Role> roles = (List<Role>) session.createQuery("from Role ").list();
-        session.close();
         session.getTransaction().commit();
+        session.close();
         return roles;
 
 
@@ -62,9 +62,6 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public List<Role> findAllById(Iterable<Long> iterable) {
 
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from Role a where a.id=:id");
-        query.setParameter("id", iterable.iterator().next());
 
         return null;
     }
@@ -72,7 +69,9 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public long count() {
         Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
         long result = session.createQuery("from Role").list().size();
+        session.getTransaction().commit();
         session.close();
         return result;
     }
@@ -107,6 +106,7 @@ public class RoleRepositoryImpl implements RoleRepository {
                 .executeUpdate();
 
         session.getTransaction().commit();
+        session.close();
     }
 
     @Override

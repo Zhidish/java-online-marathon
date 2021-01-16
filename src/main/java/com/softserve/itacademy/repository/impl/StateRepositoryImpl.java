@@ -102,8 +102,11 @@ public class StateRepositoryImpl implements StateRepository {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         Optional<State> state = Optional.of(
-                (State) session.createQuery("SELECT task FROM Task task where task.id=:id").setParameter("id", aLong).getSingleResult()
+                (State) session.createQuery("SELECT state1 FROM State state1 where state1.id=:id").setParameter("id", aLong).getSingleResult()
         );
+
+        session.getTransaction().commit();
+        session.close();
         return state;
     }
 

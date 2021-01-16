@@ -129,10 +129,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(Long aLong) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
 
-        Optional<User> user = Optional.of((User) sessionFactory.getCurrentSession().createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
-
+        Optional<User> user = Optional.of((User) session.createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
+        session.getTransaction().commit();
+        session.close();
         return user;
     }
 

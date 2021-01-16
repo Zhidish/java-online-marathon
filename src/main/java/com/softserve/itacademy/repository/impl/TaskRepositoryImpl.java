@@ -106,6 +106,8 @@ public class TaskRepositoryImpl implements TaskRepository {
                 (Task) session.createQuery("SELECT Task FROM Task task where task.id=:id")
                         .setParameter("id", aLong));
 
+        session.getTransaction().commit();
+        session.close();
         return task;
     }
 

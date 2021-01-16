@@ -99,7 +99,11 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     @Override
     public <S extends ToDo> S save(S s) {
         if(existsById(s.getId())){
-            updateToDo(s);
+            try {
+                updateToDo(s);
+            }catch(Exception e ){
+
+            }
         }else {
 
             Session session = sessionFactory.openSession();
@@ -122,9 +126,14 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Optional<ToDo> toDoOptional = Optional.of((ToDo) session.createQuery("SELECT toDo FROM ToDo  toDo where toDo.id=:id")
-                .setParameter("id", aLong).getSingleResult());
+        Optional<ToDo> toDoOptional=null;
+        try {
+             toDoOptional = Optional.of((ToDo) session.createQuery("SELECT toDo FROM ToDo  toDo where toDo.id=:id")
+                    .setParameter("id", aLong).getSingleResult());
+        }catch (Exception e ){
 
+
+        }
 
         session.getTransaction().commit();
         session.close();
