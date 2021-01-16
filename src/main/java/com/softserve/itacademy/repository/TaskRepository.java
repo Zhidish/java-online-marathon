@@ -11,4 +11,13 @@ import java.util.List;
 // implements methods for retrieving Tasks by todo_id
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
+
+    void updateTask(Task task);
+
+
+    List<Task> getTasksByToDoId(Long  aLong);
+
+
+
+
 }
