@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class StateServiceTests {
     }
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void getStateByNameTest(){
         State expected = new State();
         expected.setName("New");
@@ -39,6 +42,7 @@ public class StateServiceTests {
 
     @Test
     @Transactional
+    @DirtiesContext
     public void createStateTest(){
         State state = new State();
         state.setName("NotNew");
@@ -47,6 +51,8 @@ public class StateServiceTests {
     }
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void getStateById(){
         State expected = new State();
         expected.setName("New");
@@ -57,6 +63,7 @@ public class StateServiceTests {
 
     @Test
     @Transactional
+    @DirtiesContext
     public void updateStateTest(){
         String newName = "New 2";
         State state = stateService.readById(5L);
@@ -67,9 +74,10 @@ public class StateServiceTests {
         expected.setId(5L);
         assertEquals(expected, actual);
     }
-    
+
     @Test
     @Transactional
+    @DirtiesContext
     public void getAllStateTest(){
         taskService.delete(5L);
         taskService.delete(6L);
@@ -84,6 +92,8 @@ public class StateServiceTests {
     }
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void exceptionWhenDeleteStateWithTaskTest(){
         assertThrows(org.springframework.dao.DataIntegrityViolationException.class, ()->{
             stateService.delete(5L);
@@ -92,6 +102,7 @@ public class StateServiceTests {
 
     @Test
     @Transactional
+    @DirtiesContext
     public void deleteStateWithTaskTest(){
         taskService.delete(6L);
         stateService.delete(5L);
@@ -100,6 +111,8 @@ public class StateServiceTests {
     }
 
     @Test
+    @Transactional
+    @DirtiesContext
     public void allStateSortedByNameTest(){
         State s1 = new State();
         s1.setName("Doing");

@@ -57,7 +57,7 @@ public class User  {
     @NotNull
     private Role role;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<ToDo> myTodos;
 
     @ManyToMany

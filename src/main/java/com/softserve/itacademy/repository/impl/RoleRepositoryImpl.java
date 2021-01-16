@@ -100,7 +100,8 @@ public class RoleRepositoryImpl implements RoleRepository {
         session.getTransaction().begin();
 
         try {
-            List<User> users = (List<User>) session.createQuery("SELECT user FROM User user where user.role.id= " + aLong).list();
+            List<User> users = (List<User>) session.createQuery("SELECT user FROM User user where user.role.id=:id" ).setParameter("id",aLong)
+                    .list();
             for (User user : users) {
 
                 session.createSQLQuery("DELETE from todo_collaborator WHERE collaborator_id= " + user.getId()).executeUpdate();
@@ -117,7 +118,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
 
             }
-            session.createQuery("DELETE FROM Role r where r.id=" + aLong);
+            session.createQuery("DELETE FROM Role r where r.id=" + aLong).executeUpdate();
 
 
         } catch (Exception e) {

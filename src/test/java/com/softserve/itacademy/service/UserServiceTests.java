@@ -1,11 +1,14 @@
 package com.softserve.itacademy.service;
 
 import com.softserve.itacademy.model.User;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class UserServiceTests {
         this.userService = userService;
     }
 
+    @Test
+    @Transactional
+    @DirtiesContext
     public void getAllUsersTest() {
         int expectedSize = 3;
         List<User> users = userService.getAll();
