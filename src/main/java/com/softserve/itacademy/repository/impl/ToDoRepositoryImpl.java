@@ -6,10 +6,12 @@ import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.repository.ToDoRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -186,25 +188,26 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     public <S extends ToDo> boolean exists(Example<S> example) {
         return false;
     }
-/*
 
     @Override
     public void updateToDo(ToDo todo) {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         System.err.println(todo.getId());
-        session.createQuery("UPDATE ToDo  SET owner=:owner, tasks=:tasks, title=:title where id=:id")
+     Query query= session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,    owner=:owner, tasks=:tasks where title='Mike`s To-Do #1'")
                 .setParameter("owner", todo.getOwner())
+                .setParameter("createdAt",todo.getCreatedAt())
                 .setParameter("tasks", todo.getTasks())
-                .setParameter("title", todo.getTitle())
-                .setParameter("id", todo.getId())
-                .executeUpdate();
+              /*  .setParameter("title", todo.getTitle())*/
+               /* .setParameter("id", todo.getId())*/;
+
+     query.executeUpdate();
+
         session.getTransaction().commit();
         session.close();
 
 
     }
-*/
 
     @Override
     public List<ToDo> getAllByUser(User user) {

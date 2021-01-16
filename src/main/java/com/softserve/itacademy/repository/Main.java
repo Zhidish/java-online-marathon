@@ -57,8 +57,8 @@ public class Main {
         //  toDoRepository.save(toDo);
         //  toDoRepository.deleteById(7L);
 
-        System.out.println(toDoRepository.getOne(8L).getCreatedAt());
-        System.out.println(toDoRepository.getAllByUser(user).toString());
+       /* System.out.println(toDoRepository.getOne(8L).getCreatedAt());
+        System.out.println(toDoRepository.getAllByUser(user).toString());*/
         toDoRepository.updateToDo(toDo);
 
 

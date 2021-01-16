@@ -1,7 +1,10 @@
 package com.softserve.itacademy.repository.impl;
 
+import com.softserve.itacademy.config.AppContext;
 import com.softserve.itacademy.model.State;
 import com.softserve.itacademy.repository.StateRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class StateRepositoryImpl implements StateRepository {
+
+    static SessionFactory sessionFactory = new AppContext().getSessionFactory();
+
     @Override
     public List<State> findAll() {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+        session.getTransaction().begin();
+
+        List<State> state = session.createQuery("FROM  State ").list();
+
+        return state;
     }
 
     @Override
@@ -38,12 +49,19 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public void deleteById(Long aLong) {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.createQuery("DELETE  Task task  WHERE task.state.id=:id").setParameter("id", aLong).executeUpdate();
+        session.createQuery("DELETE State  state WHERE state.id=:id").setParameter("id", aLong).executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
 
     }
 
     @Override
     public void delete(State state) {
-
+        deleteById(state.getId());
     }
 
     @Override
@@ -58,7 +76,11 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public <S extends State> S save(S s) {
-        return null;
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.save(s);
+
+        return (S) findById(s.getId()).get();
     }
 
     @Override
@@ -68,7 +90,17 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public Optional<State> findById(Long aLong) {
-        return Optional.empty();
+
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        Optional<State> state = Optional.of(
+                (State) session.createQuery("SELECT task FROM Task task where task.id=:id").setParameter("id", aLong).getSingleResult()
+
+
+        );
+
+
+        return state;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 public interface ToDoRepository extends JpaRepository<ToDo, Long> {
 
 
-    /*void updateToDo(ToDo todo);*/
+    void updateToDo(ToDo todo);
 
 
     List<ToDo> getAllByUser(User user);
