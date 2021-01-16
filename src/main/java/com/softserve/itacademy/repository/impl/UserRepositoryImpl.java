@@ -28,11 +28,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        Session session = sessionFactory.getCurrentSession();
-
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
 
         List<User> users = (List<User>) session.createQuery("from User ").list();
-
+        session.getTransaction().commit();
         session.close();
 
         return users;
@@ -99,16 +99,26 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteAll() {
+        Session session = sessionFactory.openSession();
+
+        findAll().forEach(user -> deleteById(user.getId()));
+
+        session.close();
 
     }
 
     @Override
     public <S extends User> S save(S s) {
+        if(existsById(s.getId())){
+            updateUser(s);
+            return (S) findById(s.getId()).get();
 
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        session.save(s);
-        session.getTransaction().commit();
+        }else {
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
+            session.save(s);
+            session.getTransaction().commit();
+        }
 
         return (S) findById(s.getId()).get();
     }
@@ -122,9 +132,8 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findById(Long aLong) {
         Session session = sessionFactory.getCurrentSession();
 
-        session.getTransaction().begin();
         Optional<User> user = Optional.of((User) sessionFactory.getCurrentSession().createQuery("SELECT user from User user WHERE user.id=:id").setParameter("id", aLong).getSingleResult());
-        session.getTransaction().commit();
+
         return user;
     }
 
@@ -157,7 +166,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getOne(Long aLong) {
-        return null;
+         return findById(aLong).get();
+
+
+
+
+
+
     }
 
     @Override
@@ -211,7 +226,7 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.openSession();
         System.err.println(user.getId());
         session.getTransaction().begin();
-    Query query=    session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
+        Query query = session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
                 .setParameter("firstName", user.getFirstName())
                 .setParameter("lastName", user.getLastName())
                 .setParameter("email", user.getEmail())
@@ -219,7 +234,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("id", user.getId());
         System.err.println(query.executeUpdate());
         session.getTransaction().commit();
-session.close();
+        session.close();
 
         return getOne(user.getId());
     }

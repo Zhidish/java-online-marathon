@@ -66,7 +66,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void delete(Task task) {
-
+        deleteById(task.getId());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void deleteAll() {
-
+        findAll().forEach(task -> delete(task));
     }
 
     @Override
@@ -171,6 +171,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void updateTask(Task task) {
+
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         session.createQuery("UPDATE Task SET state=:state, name=:name,priority=:priority")

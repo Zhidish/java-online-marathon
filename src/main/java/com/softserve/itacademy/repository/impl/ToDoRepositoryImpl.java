@@ -80,7 +80,7 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public void delete(ToDo toDo) {
-
+        deleteById(toDo.getId());
     }
 
     @Override
@@ -90,6 +90,9 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public void deleteAll() {
+        Session session = sessionFactory.getCurrentSession();
+        findAll().forEach(toDo -> delete(toDo));
+
 
     }
 
@@ -130,7 +133,9 @@ public class ToDoRepositoryImpl implements ToDoRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        return findById(aLong).isPresent();
+
+
     }
 
     @Override
@@ -197,13 +202,13 @@ public class ToDoRepositoryImpl implements ToDoRepository {
         System.err.println(todo.getId());
         System.err.println(todo.getId());
 
-     Query query= session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
+        Query query = session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
                 .setParameter("owner", todo.getOwner())
-                .setParameter("createdAt",todo.getCreatedAt())
+                .setParameter("createdAt", todo.getCreatedAt())
                 .setParameter("title", todo.getTitle())
                 .setParameter("id", todo.getId());
 
-     query.executeUpdate();
+        query.executeUpdate();
 
         session.getTransaction().commit();
         session.close();

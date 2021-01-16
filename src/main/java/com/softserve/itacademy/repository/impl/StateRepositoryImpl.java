@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,8 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public long count() {
-        return 0;
+
+        return findAll().size();
     }
 
     @Override
@@ -61,6 +63,7 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public void delete(State state) {
+
         deleteById(state.getId());
     }
 
@@ -71,6 +74,7 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public void deleteAll() {
+        findAll().forEach(state -> delete(state));
 
     }
 
@@ -105,7 +109,9 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+
+     return   findById(aLong).isPresent();
+
     }
 
     @Override
@@ -130,7 +136,7 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public State getOne(Long aLong) {
-        return null;
+      return  findById(aLong).get();
     }
 
     @Override
@@ -161,5 +167,27 @@ public class StateRepositoryImpl implements StateRepository {
     @Override
     public <S extends State> boolean exists(Example<S> example) {
         return false;
+    }
+
+    @Override
+    public State getStateByName(String name) {
+     Session session = sessionFactory.openSession();
+
+    session.getTransaction().begin();
+    State state =  (State)session.createQuery("FROM State where name="+name).getSingleResult();
+    session.getTransaction().commit();
+    session.close();
+
+    return state ;
+    }
+
+    @Override
+    public List<State> getAllStatesSortedByName() {
+
+        Comparator<State> comparator = (o1, o2) -> o1.getName().compareTo(o2.getName());
+
+        List<State> statesSortedBy =findAll();
+        statesSortedBy.sort(comparator);
+        return statesSortedBy;
     }
 }

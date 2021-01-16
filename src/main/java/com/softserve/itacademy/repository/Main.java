@@ -59,9 +59,10 @@ public class Main {
 
        /* System.out.println(toDoRepository.getOne(8L).getCreatedAt());
         System.out.println(toDoRepository.getAllByUser(user).toString());*/
-        toDoRepository.updateToDo(toDo);
+       // toDoRepository.updateToDo(toDo);
+    //    userRepositoryImpl.deleteAll();
 
-
+        toDoRepository.deleteAll();
 
     }
 }
