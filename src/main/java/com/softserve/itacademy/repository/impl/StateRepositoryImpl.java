@@ -81,17 +81,18 @@ public class StateRepositoryImpl implements StateRepository {
     @Override
     public <S extends State> S save(S s) {
 
-        if(existsById(s.getId())){
+        if (existsById(s.getId())) {
+        updateState(s);
+
+            return (S) findById(s.getId()).get();
+
+        } else {
 
 
-        }else{
-
-
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
+            session.save(s);
         }
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        session.save(s);
-
         return (S) findById(s.getId()).get();
     }
 
@@ -118,7 +119,7 @@ public class StateRepositoryImpl implements StateRepository {
     @Override
     public boolean existsById(Long aLong) {
 
-     return   findById(aLong).isPresent();
+        return findById(aLong).isPresent();
 
     }
 
@@ -144,7 +145,7 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public State getOne(Long aLong) {
-      return  findById(aLong).get();
+        return findById(aLong).get();
     }
 
     @Override
@@ -178,15 +179,26 @@ public class StateRepositoryImpl implements StateRepository {
     }
 
     @Override
+    public void updateState(State state) {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.createQuery("UPDATE State SET name= " + state.getName()).executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+
+
+    }
+
+    @Override
     public State getStateByName(String name) {
-     Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-    session.getTransaction().begin();
-    State state =  (State)session.createQuery("FROM State where name="+name).getSingleResult();
-    session.getTransaction().commit();
-    session.close();
+        session.getTransaction().begin();
+        State state = (State) session.createQuery("FROM State where name=" + name).getSingleResult();
+        session.getTransaction().commit();
+        session.close();
 
-    return state ;
+        return state;
     }
 
     @Override
@@ -194,7 +206,7 @@ public class StateRepositoryImpl implements StateRepository {
 
         Comparator<State> comparator = (o1, o2) -> o1.getName().compareTo(o2.getName());
 
-        List<State> statesSortedBy =findAll();
+        List<State> statesSortedBy = findAll();
         statesSortedBy.sort(comparator);
         return statesSortedBy;
     }

@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface StateRepository extends JpaRepository<State, Long> {
 
+    void updateState(State state);
     State getStateByName(String name);
 
     List<State> getAllStatesSortedByName();
