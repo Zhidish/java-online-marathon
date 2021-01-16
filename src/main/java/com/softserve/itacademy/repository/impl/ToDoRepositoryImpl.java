@@ -231,13 +231,12 @@ public class ToDoRepositoryImpl implements ToDoRepository {
             session.getTransaction().begin();
 
             try {
-            Query query = session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
+                session.createQuery("UPDATE ToDo  SET createdAt=:createdAt,   owner=:owner,  title=:title where id=:id")
                     .setParameter("owner", todo.getOwner())
                     .setParameter("createdAt", todo.getCreatedAt())
                     .setParameter("title", todo.getTitle())
-                    .setParameter("id", todo.getId());
+                    .setParameter("id", todo.getId()).executeUpdate();
 
-            query.executeUpdate();
             } catch (Exception e) {
 
 

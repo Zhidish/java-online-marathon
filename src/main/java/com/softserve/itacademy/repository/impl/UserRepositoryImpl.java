@@ -250,12 +250,12 @@ public class UserRepositoryImpl implements UserRepository {
 
         session.getTransaction().begin();
         try {
-            Query query = session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
+            session.createQuery("UPDATE User  SET firstName=:firstName, lastName=:lastName, email=:email, password=:password where id=:id")
                     .setParameter("firstName", user.getFirstName())
                     .setParameter("lastName", user.getLastName())
                     .setParameter("email", user.getEmail())
                     .setParameter("password", user.getPassword())
-                    .setParameter("id", user.getId());
+                    .setParameter("id", user.getId()).executeUpdate();
         } catch (Exception e) {
 
 

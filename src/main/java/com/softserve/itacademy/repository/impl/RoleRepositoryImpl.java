@@ -172,9 +172,9 @@ public class RoleRepositoryImpl implements RoleRepository {
         System.err.println(role.getId());
         session.getTransaction().begin();
         try {
-            Query query = session.createQuery("UPDATE Role  SET name=:name where id=:id")
+            session.createQuery("UPDATE Role  SET name=:name where id=:id")
                     .setParameter("name", role.getName())
-                    .setParameter("id", role.getId());
+                    .setParameter("id", role.getId()).executeUpdate();
         } catch (Exception e) {
         }
         session.getTransaction().commit();

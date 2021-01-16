@@ -198,12 +198,12 @@ public class StateRepositoryImpl implements StateRepository {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         try {
-            session.createQuery("UPDATE State SET name= " + state.getName()).executeUpdate();
+            session.createQuery("UPDATE State set name=:name where id=:id").
+                    setParameter("name", state.getName())
+                    .setParameter("id", state.getId()).executeUpdate();
         }catch (Exception e ){}
         session.getTransaction().commit();
         session.close();
-
-
     }
 
     @Override

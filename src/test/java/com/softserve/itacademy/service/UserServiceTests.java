@@ -1,6 +1,7 @@
 package com.softserve.itacademy.service;
 
 import com.softserve.itacademy.model.User;
+import com.softserve.itacademy.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,65 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class UserServiceTests {
 
+    @Autowired
     UserService userService;
 
     @Autowired
-    public UserServiceTests(UserService userService) {
-        this.userService = userService;
-    }
+    UserRepository userRepository;
 
     @Test
     @Transactional
     @DirtiesContext
-    public void getAllUsersTest() {
-        int expectedSize = 3;
-        List<User> users = userService.getAll();
-        assertTrue(expectedSize <= users.size(), String.format("At least %d users shuold be in users table", expectedSize));
+    public void checkCreateUser(){
+        User user = new User();
+        user.setName("Createuser");
+        user = userService.create(user);
+        assertTrue(userRepository.existsById(user.getId()));
+    }
+    @Test
+    @Transactional
+    @DirtiesContext
+    public void checkReadUser(){
+        User user = new User();
+        user.setName("Readuser");
+        user = userService.create(user);
+        assertEquals(user, userService.readById(user.getId()));
+    }
+    @Test
+    @Transactional
+    @DirtiesContext
+    public void checkUpdateUser(){
+        User user1 = new User();
+        User user2;
+        user1.setName("Updateeuser");
+        user1 = userService.create(user1);
+        user1.setName("Updateeuser1");
+        user2 = userService.update(user1);
+        assertEquals(user1, user2);
+        assertEquals(user1.getName(), user2.getName());
+    }
+    @Test
+    @Transactional
+    @DirtiesContext
+    public void checkDeleteUser(){
+        User user = new User();
+        user.setName("Readuser");
+        user = userService.create(user);
+        userService.delete(user.getId());
+        assertNull(userService.readById(user.getId()));
+    }
+    @Test
+    @Transactional
+    @DirtiesContext
+    public void checkGetAllUsers(){
+        List<User> expectedUsers = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setName("Readuser"+i);
+            user = userService.create(user);
+            expectedUsers.add(user);
+        }
+        assertEquals(expectedUsers.size(), userService.getAll().size());
+
     }
 }
