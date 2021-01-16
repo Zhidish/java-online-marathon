@@ -100,16 +100,11 @@ public class ToDoRepositoryImpl implements ToDoRepository {
     public <S extends ToDo> S save(S s) {
         if(existsById(s.getId())){
             updateToDo(s);
-           return   (S) findById(s.getId()).get();
         }else {
-
 
             Session session = sessionFactory.openSession();
             session.getTransaction().begin();
-
             session.save(s);
-
-
             session.getTransaction().commit();
             session.close();
         }

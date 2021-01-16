@@ -82,13 +82,8 @@ public class StateRepositoryImpl implements StateRepository {
     public <S extends State> S save(S s) {
 
         if (existsById(s.getId())) {
-        updateState(s);
-
-            return (S) findById(s.getId()).get();
-
+            updateState(s);
         } else {
-
-
             Session session = sessionFactory.openSession();
             session.getTransaction().begin();
             session.save(s);
@@ -108,11 +103,7 @@ public class StateRepositoryImpl implements StateRepository {
         session.getTransaction().begin();
         Optional<State> state = Optional.of(
                 (State) session.createQuery("SELECT task FROM Task task where task.id=:id").setParameter("id", aLong).getSingleResult()
-
-
         );
-
-
         return state;
     }
 

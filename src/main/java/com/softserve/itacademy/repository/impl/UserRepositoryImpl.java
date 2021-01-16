@@ -111,7 +111,6 @@ public class UserRepositoryImpl implements UserRepository {
     public <S extends User> S save(S s) {
         if(existsById(s.getId())){
             updateUser(s);
-            return (S) findById(s.getId()).get();
 
         }else {
             Session session = sessionFactory.openSession();

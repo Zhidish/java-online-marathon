@@ -130,14 +130,27 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public <S extends Role> S save(S s) {
-
+        if (existsById(s.getId())){
+            updateRole(s);
+        }else {
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
+            session.save(s);
+            session.getTransaction().commit();
+        }
+        return (S) findById(s.getId()).get();
+    }
+    @Override
+    public void updateRole(Role role) {
         Session session = sessionFactory.openSession();
+        System.err.println(role.getId());
         session.getTransaction().begin();
-        session.save(s);
+        Query query = session.createQuery("UPDATE Role  SET name=:name where id=:id")
+                .setParameter("name", role.getName())
+                .setParameter("id", role.getId());
+        System.err.println(query.executeUpdate());
         session.getTransaction().commit();
-
-
-        return null;
+        session.close();
     }
 
     @Override
