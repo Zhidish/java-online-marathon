@@ -81,15 +81,19 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public <S extends Task> S save(S s) {
+        if (existsById(s.getId())) {
+            updateTask(s);
+            return  (S) findById(s.getId()).get();
+        } else {
+            Session session = sessionFactory.openSession();
+            session.getTransaction().begin();
+            session.save(s);
+            session.getTransaction().commit();
+            session.close();
 
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        session.save(s);
-        session.getTransaction().commit();
-        session.close();
+        }
 
-
-        return null;
+        return  (S) findById(s.getId()).get();
     }
 
     @Override

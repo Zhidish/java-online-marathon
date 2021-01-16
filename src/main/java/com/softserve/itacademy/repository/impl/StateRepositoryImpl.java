@@ -80,6 +80,14 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public <S extends State> S save(S s) {
+
+        if(existsById(s.getId())){
+
+
+        }else{
+
+
+        }
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         session.save(s);
