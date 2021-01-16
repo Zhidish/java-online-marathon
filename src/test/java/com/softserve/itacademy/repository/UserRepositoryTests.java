@@ -1,5 +1,6 @@
 package com.softserve.itacademy.repository;
 
+import com.softserve.itacademy.model.Role;
 import com.softserve.itacademy.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,9 @@ public class UserRepositoryTests {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @Test
     @Transactional
     @DirtiesContext
@@ -34,6 +38,10 @@ public class UserRepositoryTests {
         user.setFirstName("Create");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
+        Role role = new Role();
+        role.setName("UserRole1");
+        role = roleRepository.save(role);
+        user.setRole(role);
         user = userRepository.save(user);
         long expectedId = user.getId();
         assertEquals(expectedId, user.getId());
@@ -43,10 +51,14 @@ public class UserRepositoryTests {
     @DirtiesContext
     public void checkDeleteUserByUser(){
         User user = new User();
-        user.setEmail("valid2@cv.edu.ua");
+        user.setEmail("valid2@gmail.ua");
         user.setFirstName("Delete");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
+        Role role = new Role();
+        role.setName("UserRole2");
+        role = roleRepository.save(role);
+        user.setRole(role);
         user = userRepository.save(user);
         userRepository.delete(user);
         assertFalse(userRepository.existsById(user.getId()));
@@ -56,10 +68,14 @@ public class UserRepositoryTests {
     @DirtiesContext
     public void checkDeleteUserById(){
         User user = new User();
-        user.setEmail("valid2@cv.edu.ua");
+        user.setEmail("valid2@gmail.ua");
         user.setFirstName("Dellete");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
+        Role role = new Role();
+        role.setName("UserRole3");
+        role = roleRepository.save(role);
+        user.setRole(role);
         user = userRepository.save(user);
         long expectedId = user.getId();
         assertEquals(expectedId, user.getId());
@@ -72,10 +88,14 @@ public class UserRepositoryTests {
     public void checkDeleteAllUsers(){
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setEmail("valid2@cv.edu.ua");
-            user.setFirstName("Deletell");
-            user.setLastName("Users");
+            user.setEmail("valid2"+i+"@gmail.ua");
+            user.setFirstName("Counter"+(char)(i+97));
+            user.setLastName("User"+(char)(i+97));
             user.setPassword("qwQW12!@");
+            Role role = new Role();
+            role.setName("UserRole"+i);
+            role = roleRepository.save(role);
+            user.setRole(role);
             userRepository.save(user);
         }
         assertEquals(userRepository.count(), 10);
@@ -89,10 +109,14 @@ public class UserRepositoryTests {
     @DirtiesContext
     public void checkExistsUser(){
         User user = new User();
-        user.setEmail("valid2@cv.edu.ua");
+        user.setEmail("valid2@gmail.ua");
         user.setFirstName("Existed");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
+        Role role = new Role();
+        role.setName("UserRole5");
+        role = roleRepository.save(role);
+        user.setRole(role);
         userRepository.save(user);
         assertTrue(userRepository.findAll().stream().anyMatch(user1 -> user1.getId() == user.getId()));
         assertTrue(userRepository.existsById(user.getId()));
@@ -102,10 +126,14 @@ public class UserRepositoryTests {
     @DirtiesContext
     public void checkFindUser(){
         User user = new User();
-        user.setEmail("valid2@cv.edu.ua");
+        user.setEmail("valid2@gmail.ua");
         user.setFirstName("Found");
         user.setLastName("User");
         user.setPassword("qwQW12!@");
+        Role role = new Role();
+        role.setName("UserRole6");
+        role = roleRepository.save(role);
+        user.setRole(role);
         userRepository.save(user);
         assertTrue(userRepository.findAll().stream().anyMatch(user1 -> user1.getId() == user.getId()));
         assertEquals(user, userRepository.findById(user.getId()).get());
@@ -117,10 +145,14 @@ public class UserRepositoryTests {
         List<User> expectedUsers = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setEmail("valid2@cv.edu.ua");
-            user.setFirstName("Returned");
-            user.setLastName("User");
+            user.setEmail("valid2"+i+"@gmail.ua");
+            user.setFirstName("Counter"+(char)(i+97));
+            user.setLastName("User"+(char)(i+97));
             user.setPassword("qwQW12!@");
+            Role role = new Role();
+            role.setName("UserRole"+i);
+            role = roleRepository.save(role);
+            user.setRole(role);
             userRepository.save(user);
             expectedUsers.add(user);
         }
@@ -135,22 +167,30 @@ public class UserRepositoryTests {
         Set<User> expectedUsers = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setEmail("valid2@cv.edu.ua");
-            user.setFirstName("Counter");
-            user.setLastName("User");
+            user.setEmail("valid2"+i+"@gmail.ua");
+            user.setFirstName("Counter"+(char)(i+97));
+            user.setLastName("User"+(char)(i+97));
             user.setPassword("qwQW12!@");
+            Role role = new Role();
+            role.setName("UserRole"+i);
+            role = roleRepository.save(role);
+            user.setRole(role);
             userRepository.save(user);
             expectedUsers.add(user);
         }
         assertEquals(userRepository.count(), userRepository.findAll().size(), expectedUsers.size());
         assertEquals(userRepository.count(), expectedUsers.size());
         assertEquals(userRepository.findAll().size(), expectedUsers.size());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 10; i < 20; i++) {
             User user = new User();
-            user.setEmail("valid2@cv.edu.ua");
-            user.setFirstName("Counter");
-            user.setLastName("User");
+            user.setEmail("valid2"+i+"@gmail.ua");
+            user.setFirstName("Counter"+(char)(i+97));
+            user.setLastName("User"+(char)(i+97));
             user.setPassword("qwQW12!@");
+            Role role = new Role();
+            role.setName("UserRole"+i);
+            role = roleRepository.save(role);
+            user.setRole(role);
             userRepository.save(user);
             expectedUsers.add(user);
         }

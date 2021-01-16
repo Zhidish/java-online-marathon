@@ -75,8 +75,6 @@ public class UserRepositoryImpl implements UserRepository {
         User user = new User();
         user.setId(aLong);
         delete(user);
-
-
     }
 
     @Override
@@ -114,9 +112,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteAll() {
         Session session = sessionFactory.openSession();
-
         findAll().forEach(user -> deleteById(user.getId()));
-
         session.close();
 
     }

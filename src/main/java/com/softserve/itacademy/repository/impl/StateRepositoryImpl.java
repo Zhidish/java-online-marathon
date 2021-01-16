@@ -63,7 +63,7 @@ public class StateRepositoryImpl implements StateRepository {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         try {
-            session.createQuery("DELETE  Task task  WHERE task.state.id=:id").setParameter("id", aLong).executeUpdate();
+            session.createQuery("DELETE Task task  WHERE task.state.id=:id").setParameter("id", aLong).executeUpdate();
             session.createQuery("DELETE State  state WHERE state.id=:id").setParameter("id", aLong).executeUpdate();
         } catch (Exception e) {
         }
@@ -74,7 +74,6 @@ public class StateRepositoryImpl implements StateRepository {
 
     @Override
     public void delete(State state) {
-
         deleteById(state.getId());
     }
 
