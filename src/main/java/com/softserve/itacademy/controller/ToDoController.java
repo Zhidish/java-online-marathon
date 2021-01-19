@@ -3,6 +3,7 @@ package com.softserve.itacademy.controller;
 import com.softserve.itacademy.model.ToDo;
 import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.service.impl.ToDoServiceImpl;
+import com.softserve.itacademy.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,8 @@ public class ToDoController {
 
     @Autowired
     ToDoServiceImpl toDoService;
+    @Autowired
+    UserServiceImpl userService;
 
 
     @GetMapping("/{id}/update")
@@ -42,9 +45,10 @@ public class ToDoController {
 
 
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id,Model model) {
         toDoService.delete(id);
-        return "redirect:/todos/all";
+        String userID = (String) model.getAttribute("userID");
+        return "redirect:/todos/all/"+userID;
     }
 
     @PostMapping("/update")
@@ -53,14 +57,24 @@ public class ToDoController {
         return "redirect:/todos/all";
     }
 
-    @GetMapping("/all")
-    public String todosPage(Model model) {
+    @GetMapping("/all/{id}")
+    public String todosPage(@PathVariable()Integer id, Model model) {
         int counter = 0;
-        model.addAttribute("userName","some user name //need to be done");
+        model.addAttribute("userID",id);
+        model.addAttribute("userName",userService.readById(id).getFirstName() + " " + userService.readById(id).getLastName());
         model.addAttribute("todos", toDoService.getAll());
         model.addAttribute("counter", new Counter());
         return "todo-lists";
     }
+
+//    @GetMapping("/all")
+//    public String todoPage( Model model) {
+//        int counter = 0;
+//        model.addAttribute("userName",userService.readById(id).getFirstName() + " " + userService.readById(id).getLastName());
+//        model.addAttribute("todos", toDoService.getAll());
+//        model.addAttribute("counter", new Counter());
+//        return "todo-lists";
+//    }
 
     //add needed fields
 
