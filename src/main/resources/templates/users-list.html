@@ -11,7 +11,7 @@
     <tr>
         <th>No.</th>
         <th>Id</th>
-        <th colspan="2">Full Name</th>
+        <th>Full Name</th>
         <th>E-mail</th>
         <th colspan="2">Operations</th>
     </tr>
@@ -20,11 +20,9 @@
 
         <td th:text="${counter.getCounter()}"></td>
         <td th:text="${user.getId()}"></td>
-        <a href="">
-            <td th:text="${user.getFirstName()}"></td>
-            <td th:text="${user.getLastName()}"></td>
-        </a>
 
+
+        <td><a th:href="@{/all/{id}/(id=${user.getId()})}" th:text="${user.getFirstName() + ' '+ user.getLastName()} " /></td>
         <td th:text="${user.getEmail()}"></td>
         <td>
             <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>
