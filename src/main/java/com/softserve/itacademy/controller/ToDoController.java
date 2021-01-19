@@ -1,13 +1,12 @@
 package com.softserve.itacademy.controller;
 
+import com.softserve.itacademy.model.ToDo;
+import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.service.impl.ToDoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 
@@ -48,10 +47,16 @@ public class ToDoController {
         return "redirect:/todos/all";
     }
 
+    @PostMapping("/update")
+    public String updatingToDo(@ModelAttribute(name="todo") ToDo toDo) {
+        toDoService.update(toDo);
+        return "redirect:/todos/all";
+    }
 
     @GetMapping("/all")
     public String todosPage(Model model) {
         int counter = 0;
+        model.addAttribute("userName","some user name //need to be done");
         model.addAttribute("todos", toDoService.getAll());
         model.addAttribute("counter", new Counter());
         return "todo-lists";

@@ -5,7 +5,7 @@
     <title>List of Todos</title>
 </head>
 <body>
-
+<p>All ToDo Lists of <span th:text="${userName}"></span></p>
 <table border="2">
     <tr>
         <th>No.</th>
@@ -16,10 +16,10 @@
         <th colspan="2">Operations</th>
     </tr>
 
-    <tr th:each="todo: ${todos }">
+    <tr th:each="todo: ${todos}">
         <td th:text="${counter.getCounter()}"></td>
         <td th:text="${todo.getId()}"></td>
-        <td th:text="${todo.getTitle()}"></td>
+        <td><a th:href="@{/tasks/all}" th:text="${todo.getTitle()}" /></td>
         <td th:text="${todo.getCreatedAt()}"></td>
         <td th:text="${todo.getOwner().getFirstName() + ' ' + todo.getOwner().getLastName()}"></td>
 
