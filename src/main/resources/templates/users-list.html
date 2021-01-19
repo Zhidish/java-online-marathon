@@ -17,10 +17,14 @@
     </tr>
 
     <tr th:each="user: ${users }">
+
         <td th:text="${counter.getCounter()}"></td>
         <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getFirstName()}"></td>
-        <td th:text="${user.getLastName()}">
+        <a href="">
+            <td th:text="${user.getFirstName()}"></td>
+            <td th:text="${user.getLastName()}"></td>
+        </a>
+
         <td th:text="${user.getEmail()}"></td>
         <td>
             <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>
@@ -31,6 +35,8 @@
 
     </tr>
 </table>
+
+<a href="/users/create"> create </a>
 
 
 </body>
