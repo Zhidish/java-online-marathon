@@ -24,10 +24,10 @@
         <td th:text="${todo.getOwner().getFirstName() + ' ' + todo.getOwner().getLastName()}"></td>
 
         <td>
-<!--            <a th:href="@{/users/{id}/update(id=${user.getId()})}">Edit</a>-->
+            <a th:href="@{/todos/{id}/update(id=${todo.getId()})}">Update</a>
         </td>
         <td>
-<!--            <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>-->
+            <a th:href="@{/todos/{id}/delete(id=${todo.getId()})}">Remove</a>
         </td>
 
 

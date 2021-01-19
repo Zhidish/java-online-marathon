@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.transaction.Transactional;
 
 @Controller
 @RequestMapping("/todos")
@@ -15,26 +19,37 @@ public class ToDoController {
         private int counter = 0;
 
         Counter() {
-
         }
 
         private void count() {
             counter++;
-
-
         }
 
         public int getCounter() {
             this.count();
             return counter;
         }
-
     }
 
     @Autowired
     ToDoServiceImpl toDoService;
 
-    @GetMapping("/")
+
+    @GetMapping("/{id}/update")
+    public String update(@PathVariable Integer id, Model model) {
+        model.addAttribute("todo", toDoService.readById(id));
+        return "update-todo";
+    }
+
+
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Integer id) {
+        toDoService.delete(id);
+        return "redirect:/todos/all";
+    }
+
+
+    @GetMapping("/all")
     public String todosPage(Model model) {
         int counter = 0;
         model.addAttribute("todos", toDoService.getAll());
