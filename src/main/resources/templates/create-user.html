@@ -6,5 +6,22 @@
 </head>
 <body>
 
+
+
+
+<form th:action="@{/users/create}"  method="post">
+    <p> FirstName: <input type="text" name="firstName"/></p>
+    <p> LastName: <input type="text" name="lastName"/></p>
+    <p> email: <input type="text" name="email" /></p>
+    <p> password: <input type="text" name="password" /></p>
+
+    <input type="submit" placeholder="create"/>
+    <input type="reset" placeholder="clean">
+
+</form>
+
+
+
+
 </body>
 </html>
