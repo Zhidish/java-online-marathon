@@ -22,7 +22,7 @@
         <td th:text="${user.getId()}"></td>
 
 
-        <td><a th:href="@{/all/{id}/(id=${user.getId()})}" th:text="${user.getFirstName() + ' '+ user.getLastName()} " /></td>
+user        <td><a th:href="@{/todos/all/{id}/(id=${user.getId()})}" th:text="${user.getFirstName() + ' '+ user.getLastName()} " /></td>
         <td th:text="${user.getEmail()}"></td>
         <td>
             <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>
