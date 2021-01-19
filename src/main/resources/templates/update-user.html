@@ -7,5 +7,17 @@
 </head>
 <body>
 
+<form th:action="@{/users/update}" th:object="${user}" method="post">
+    <p> FirstName: <input type="text" th:field="*{firstName}"/></p>
+    <p> LastName: <input type="text" th:field="*{lastName}"/></p>
+    <p> email: <input type="text" th:field="*{email}"/></p>
+    <p> password: <input type="text" th:field="*{password}"/></p>
+    <input type="hidden" th:field="*{id}"/>
+    <input type="submit" placeholder="update"/>
+    <input type="reset" placeholder="clean">
+
+</form>
+
+
 </body>
 </html>
