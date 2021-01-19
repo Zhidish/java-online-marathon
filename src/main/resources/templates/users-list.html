@@ -6,5 +6,32 @@
 </head>
 <body>
 
+
+<table border="2">
+    <tr>
+        <th>No.</th>
+        <th>Id</th>
+        <th colspan="2">Full Name</th>
+        <th>E-mail</th>
+        <th colspan="2">Operations</th>
+    </tr>
+
+    <tr th:each="user: ${users }">
+        <td th:text="${counter.getCounter()}"></td>
+        <td th:text="${user.getId()}"></td>
+        <td th:text="${user.getFirstName()}"></td>
+        <td th:text="${user.getLastName()}">
+        <td th:text="${user.getEmail()}"></td>
+        <td>
+            <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>
+        </td>
+        <td>
+            <a th:href="@{/users/{id}/update(id=${user.getId()})}">Update</a>
+        </td>
+
+    </tr>
+</table>
+
+
 </body>
 </html>
