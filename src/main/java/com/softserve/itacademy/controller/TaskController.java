@@ -1,6 +1,8 @@
 package com.softserve.itacademy.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -8,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TaskController {
 
     //add needed fields
-
+//    @GetMapping("/")
+//    public String tasksPage(Model model) {
+//        return "todo-tasks";
+//    }
 //    @GetMapping("/create/todos/{todo_id}")
-//    public String create(//add needed parameters) {
+//    public String create(//a
+//    dd needed parameters) {
 //        //ToDo
 //        return " ";
 //    }

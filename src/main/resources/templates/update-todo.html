@@ -5,6 +5,15 @@
     <title>Update existing To-Do</title>
 </head>
 <body>
+<form th:action="@{/todos/update}" th:object="${todo}" method="post">
+    <p> Title: <input type="text" th:field="*{title}"/></p>
+    <p> Date of Creation: <input type="text" th:field="*{createdAt}"/></p>
+    <input type="hidden" th:field="*{id}"/>
+<!--    <input type="submit" placeholder="update"/>-->
+<!--    <input type="reset" placeholder="clean">-->
+    <input type="submit" value="Updat   e" id="create-btn">
+    <input type="reset" value="Clear" id="clear-btn">
 
+</form>
 </body>
 </html>
