@@ -2,9 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>List of Users</title>
+    <title>List of Todos</title>
 </head>
 <body>
 
+<table border="2">
+    <tr>
+        <th>No.</th>
+        <th>Id</th>
+        <th >Title</th>
+        <th>Created At</th>
+        <th>Owner</th>
+        <th colspan="2">Operations</th>
+    </tr>
+
+    <tr th:each="todo: ${todos }">
+        <td th:text="${counter.getCounter()}"></td>
+        <td th:text="${todo.getId()}"></td>
+        <td th:text="${todo.getTitle()}"></td>
+        <td th:text="${todo.getCreatedAt()}"></td>
+        <td th:text="${todo.getOwner().getFirstName() + ' ' + todo.getOwner().getLastName()}"></td>
+
+        <td>
+<!--            <a th:href="@{/users/{id}/update(id=${user.getId()})}">Edit</a>-->
+        </td>
+        <td>
+<!--            <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Remove</a>-->
+        </td>
+
+
+    </tr>
+</table>
 </body>
 </html>
