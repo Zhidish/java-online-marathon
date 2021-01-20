@@ -49,10 +49,13 @@ public class TaskController {
     @Autowired
     ToDoServiceImpl toDoService;
 
-    @GetMapping("/all/{user_id}")
-    public String tasksPage(@PathVariable(name = "user_id") Integer id, Model model) {
+    @GetMapping("/all/{user_id}/{todo_id}")
+    public String tasksPage(@PathVariable(name = "user_id") Integer id,
+                            @PathVariable(name = "todo_id") Integer todo_id,
+                            Model model) {
         List<Task> tasks = new ArrayList<>();
-        System.err.println(id+"USER ID ");
+        System.err.println(id + "USER ID ");
+
 
         toDoService.getByUserId(id).forEach(toDo -> tasks.addAll(toDo.getTasks()));
 
@@ -62,6 +65,8 @@ public class TaskController {
         });
         model.addAttribute("tasks", tasks);
         model.addAttribute("counter", new Counter());
+        model.addAttribute("todo_id",todo_id);
+
 
         return "todo-tasks";
     }
@@ -88,7 +93,7 @@ public class TaskController {
 
         taskService.create(task);
 
-        return "redirect:/tasks/all";
+        return "redirect:/tasks/all/" + toDoService.readById(id).getOwner().getId() +"/" +id;
 
     }
 
@@ -114,7 +119,8 @@ public class TaskController {
     public String update_(@RequestParam(name = "name") String name,
                           @RequestParam(name = "priority") String priority,
                           @RequestParam(name = "status") String status,
-                          @PathVariable(name = "task_id") Integer id
+                          @PathVariable(name = "task_id") Integer id,
+                          @PathVariable(name = "todo_id") Integer todo_id
 
     ) {
         System.err.println(name);
@@ -125,7 +131,7 @@ public class TaskController {
         task.setState(stateService.getByName(status));
         taskService.update(task);
 
-        return "redirect:/tasks/all";
+        return "redirect:/tasks/all/" + toDoService.readById(todo_id).getOwner().getId()+"/"+todo_id;
     }
 
     @GetMapping("/{task_id}/delete/todos/{todo_id}")
@@ -133,7 +139,7 @@ public class TaskController {
                          @PathVariable(name = "todo_id") Integer todo_id) {
         taskService.delete(task_id);
 
-        return "redirect:/tasks/all";
+        return "redirect:/tasks/all/" + toDoService.readById(todo_id).getOwner().getId()+"/"+todo_id;
     }
 
 
