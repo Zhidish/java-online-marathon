@@ -45,10 +45,19 @@ public class ToDoController {
     }
 
     @GetMapping("/create/{id_user}")
-    public String create(@PathVariable Integer id, Model model,  @PathVariable(name = "id_user")  Integer user_id) {
-        model.addAttribute("todo", toDoService.readById(id));
+    public String create( Model model, @PathVariable(name = "id_user")  Integer user_id) {
         model.addAttribute("id_user",user_id);
-        return "update-todo";
+        return "create-todo";
+    }
+
+    @PostMapping("/creating/{id_user}")
+    public String creatingToDo(  @RequestParam(name="title") String title,
+                                  @RequestParam(name="owner") String owner,
+                                  Model model, @PathVariable(name = "id_user")  Integer user_id) {
+        System.err.println(title);
+        System.err.println(owner);
+//        model.addAttribute("id_user",user_id);
+        return "redirect:/todos/all/"+user_id;
     }
 
 

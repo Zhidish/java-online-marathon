@@ -31,6 +31,7 @@
         </td>
     </tr>
 </table>
-<p><a href="">create new ToDo</a>></p>
+<!--<p><a href="/todos/create/{id_user}(id_user=${userID})">create new ToDo</a></p>-->
+<p><a th:href="@{/todos/create/{user_id}(user_id=${userID})}" />create new ToDo</p>
 </body>
 </html>
