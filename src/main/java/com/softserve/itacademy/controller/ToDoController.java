@@ -55,14 +55,11 @@ public class ToDoController {
     public String creatingToDo(  @RequestParam(name="title") String title,
                                   @RequestParam(name="owner") String owner,
                                   Model model, @PathVariable(name = "id_user")  Integer user_id) {
-        System.err.println(title);
-        System.err.println(owner);
         ToDo toDo = new ToDo();
         toDo.setTitle(title);
         toDo.setCreatedAt(LocalDateTime.now());
         toDo.setOwner(userService.readById(Long.parseLong(owner)));
         toDoService.create(toDo);
-//        model.addAttribute("id_user",user_id);
         return "redirect:/todos/all/"+user_id;
     }
 
