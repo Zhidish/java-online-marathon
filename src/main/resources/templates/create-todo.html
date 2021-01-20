@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create New ToDo List</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Create New ToDo List</title>
+    </head>
 
-</body>
+    <body>
+    <form th:action="@{/todos/creating/{user_id}(user_id=${id_user})}" th:method="post">
+
+        <p> Title of new ToDo: <input type="text" name="title"/></p>
+
+        <label> Owner:
+            <select th:name="owner">
+                <option th:value="5" selected>Nick</option>
+                <option th:value="6">Nora</option>
+                <option th:value="4">Mike</option>
+            </select>
+        </label>
+
+        <input type="submit" value="Create" id="create-btn">
+        <input type="reset" value="Clear" id="clear-btn">
+    </form>
+    </body>
 </html>
+
