@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<form xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create New ToDo List</title>
-</head>
-<body>
-<form th:action="@{/todos/creating/{user_id}(user_id=${id_user})}" method="post">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Create New ToDo List</title>
+    </head>
 
-<p> Title of new ToDo: <input type="text" name="title"/></p>
+    <body>
+    <form th:action="@{/todos/creating/{user_id}(user_id=${id_user})}" th:method="post">
 
-    <label> Owner:
-        <select th:name="owner">
-            <option th:value="nick" selected>nick@mail.com</option>
-            <option th:value="nora">nora@mail.com</option>
-            <option th:value="mike">mike@mail.com</option>
-        </select>
+        <p> Title of new ToDo: <input type="text" name="title"/></p>
 
-    </label>
+        <label> Owner:
+            <select th:name="owner">
+                <option th:value="nick" selected>nick@mail.com</option>
+                <option th:value="nora">nora@mail.com</option>
+                <option th:value="mike">mike@mail.com</option>
+            </select>
+        </label>
 
-<input type="submit" value="Create" id="create-btn">
-<input type="reset" value="Clear" id="clear-btn">
-
-</form>
-</body>
-</form>
+        <input type="submit" value="Create" id="create-btn">
+        <input type="reset" value="Clear" id="clear-btn">
+    </form>
+    </body>
 </html>
+
