@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Todos</title>
+
 </head>
 <body>
 <p>All ToDo Lists of <span th:text="${userName}"></span></p>
@@ -32,6 +33,6 @@
     </tr>
 </table>
 <!--<p><a href="/todos/create/{id_user}(id_user=${userID})">create new ToDo</a></p>-->
-<p><a th:href="@{/todos/create/{user_id}(user_id=${userID})}" />create new ToDo</p>
+<p><a th:href="@{/todos/create/{user_id}(user_id=${userID})}" />Create new ToDo</p>
 </body>
 </html>

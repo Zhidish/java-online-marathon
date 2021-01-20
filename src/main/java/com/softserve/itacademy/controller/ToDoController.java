@@ -87,7 +87,6 @@ public class ToDoController {
 
     @GetMapping("/all/{id}")
     public String todosPage(@PathVariable()Integer id, Model model) {
-
         model.addAttribute("userID",id);
         model.addAttribute("userName",userService.readById(id).getFirstName() + " " + userService.readById(id).getLastName());
         model.addAttribute("todos", toDoService.getAll());
