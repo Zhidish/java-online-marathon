@@ -19,7 +19,7 @@
     <tr th:each="todo: ${todos}">
         <td th:text="${counter.getCounter()}"></td>
         <td th:text="${todo.getId()}"></td>
-        <td><a th:href="@{/tasks/all}" th:text="${todo.getTitle()}" /></td>
+        <td><a th:href="@{/tasks/all/{user_id}(user_id=${userID})}" th:text="${todo.getTitle()}" /></td>
         <td th:text="${todo.getCreatedAt()}"></td>
         <td th:text="${todo.getOwner().getFirstName() + ' ' + todo.getOwner().getLastName()}"></td>
 
@@ -27,7 +27,7 @@
             <a th:href="@{/todos/{id}/update(id=${todo.getId()})}">Update</a>
         </td>
         <td>
-            <a th:href="@{/todos/{id}/delete(id=${todo.getId()})}">Remove</a>
+            <a th:href="@{/todos/{id}/delete/{id_user}(id=${todo.getId()},id_user=${userID})}">Remove</a>
         </td>
 
 

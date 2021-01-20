@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
@@ -46,10 +49,18 @@ public class TaskController {
     @Autowired
     ToDoServiceImpl toDoService;
 
-    @GetMapping("/all")
-    public String tasksPage(Model model) {
+    @GetMapping("/all/{user_id}")
+    public String tasksPage(@PathVariable(name = "user_id") Integer id, Model model) {
+        List<Task> tasks = new ArrayList<>();
+        System.err.println(id+"USER ID ");
 
-        model.addAttribute("tasks", taskService.getAll());
+        toDoService.getByUserId(id).forEach(toDo -> tasks.addAll(toDo.getTasks()));
+
+        tasks.forEach(task -> {
+            System.err.println(task.toString());
+
+        });
+        model.addAttribute("tasks", tasks);
         model.addAttribute("counter", new Counter());
 
         return "todo-tasks";
@@ -83,17 +94,17 @@ public class TaskController {
 
     @GetMapping("/create/todos/{todo_id}")
     public String create_(@PathVariable(name = "todo_id") Integer id, Model model) {
-        model.addAttribute("todo_id",id);
+        model.addAttribute("todo_id", id);
         return "create-task";
     }
 
     @GetMapping("/{task_id}/update/todos/{todo_id}")
-    public String update(@PathVariable(name="task_id") Integer task_id,
-                         @PathVariable(name="todo_id") Integer todo_id,
+    public String update(@PathVariable(name = "task_id") Integer task_id,
+                         @PathVariable(name = "todo_id") Integer todo_id,
                          Model model
-                         ) {
+    ) {
 
-        model.addAttribute("task",taskService.readById(task_id));
+        model.addAttribute("task", taskService.readById(task_id));
 
 
         return "update-task";
@@ -108,11 +119,11 @@ public class TaskController {
     ) {
         System.err.println(name);
         System.err.println(priority);
-      Task task = taskService.readById(id);
-      task.setName(name);
-      task.setPriority(Priority.valueOf(priority));
-      task.setState(stateService.getByName(status));
-      taskService.update(task);
+        Task task = taskService.readById(id);
+        task.setName(name);
+        task.setPriority(Priority.valueOf(priority));
+        task.setState(stateService.getByName(status));
+        taskService.update(task);
 
         return "redirect:/tasks/all";
     }

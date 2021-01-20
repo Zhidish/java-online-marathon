@@ -44,11 +44,16 @@ public class ToDoController {
     }
 
 
-    @GetMapping("/{id}/delete")
-    public String delete(@PathVariable Integer id,Model model) {
+    @GetMapping("/{id}/delete/{id_user}")
+    public String delete(@PathVariable Integer id,
+                         @PathVariable(name = "id_user")  Integer user_id,
+                         Model model) {
+
         toDoService.delete(id);
-        String userID = (String) model.getAttribute("userID");
-        return "redirect:/todos/all/"+userID;
+
+        System.err.println("Я тут");
+
+        return "redirect:/todos/all/"+user_id;
     }
 
     @PostMapping("/update")
@@ -59,7 +64,7 @@ public class ToDoController {
 
     @GetMapping("/all/{id}")
     public String todosPage(@PathVariable()Integer id, Model model) {
-        int counter = 0;
+
         model.addAttribute("userID",id);
         model.addAttribute("userName",userService.readById(id).getFirstName() + " " + userService.readById(id).getLastName());
         model.addAttribute("todos", toDoService.getAll());
