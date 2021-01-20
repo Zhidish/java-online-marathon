@@ -37,9 +37,17 @@ public class ToDoController {
     UserServiceImpl userService;
 
 
-    @GetMapping("/{id}/update")
-    public String update(@PathVariable Integer id, Model model) {
+    @GetMapping("/{id}/update/{id_user}")
+    public String update(@PathVariable Integer id, Model model,  @PathVariable(name = "id_user")  Integer user_id) {
         model.addAttribute("todo", toDoService.readById(id));
+        model.addAttribute("id_user",user_id);
+        return "update-todo";
+    }
+
+    @GetMapping("/create/{id_user}")
+    public String create(@PathVariable Integer id, Model model,  @PathVariable(name = "id_user")  Integer user_id) {
+        model.addAttribute("todo", toDoService.readById(id));
+        model.addAttribute("id_user",user_id);
         return "update-todo";
     }
 
@@ -51,15 +59,18 @@ public class ToDoController {
 
         toDoService.delete(id);
 
-        System.err.println("Я тут");
-
         return "redirect:/todos/all/"+user_id;
     }
 
-    @PostMapping("/update")
-    public String updatingToDo(@ModelAttribute(name="todo") ToDo toDo) {
-        toDoService.update(toDo);
-        return "redirect:/todos/all";
+    @PostMapping("/update/{id_user}")
+    public String updatingToDo(@RequestParam(name = "title") String name,
+                               @RequestParam(name = "id") long id,
+                               @ModelAttribute(name="todo") ToDo toDo,
+                               @PathVariable()  Integer id_user) {
+        ToDo newTodo = toDoService.readById(id);
+        newTodo.setTitle(name);
+        toDoService.update(newTodo);
+        return "redirect:/todos/all/" + id_user;
     }
 
     @GetMapping("/all/{id}")
@@ -71,69 +82,4 @@ public class ToDoController {
         model.addAttribute("counter", new Counter());
         return "todo-lists";
     }
-
-//    @GetMapping("/all")
-//    public String todoPage( Model model) {
-//        int counter = 0;
-//        model.addAttribute("userName",userService.readById(id).getFirstName() + " " + userService.readById(id).getLastName());
-//        model.addAttribute("todos", toDoService.getAll());
-//        model.addAttribute("counter", new Counter());
-//        return "todo-lists";
-//    }
-
-    //add needed fields
-
-//    @GetMapping("/create/users/{owner_id}")
-//    public String create(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @PostMapping("/create/users/{owner_id}")
-//    public String create(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/{id}/tasks")
-//    public String read(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/{todo_id}/update/users/{owner_id}")
-//    public String update(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @PostMapping("/{todo_id}/update/users/{owner_id}")
-//    public String update(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/{todo_id}/delete/users/{owner_id}")
-//    public String delete(//add needed parameters) {
-//                         // ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/all/users/{user_id}")
-//    public String getAll(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/{id}/add")
-//    public String addCollaborator(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
-//
-//    @GetMapping("/{id}/remove")
-//    public String removeCollaborator(//add needed parameters) {
-//        //ToDo
-//        return " ";
-//    }
 }
