@@ -54,7 +54,7 @@ public class TaskController {
                             @PathVariable(name = "todo_id") Integer todo_id,
                             Model model) {
         List<Task> tasks = new ArrayList<>();
-        System.err.println(id + "USER ID ");
+
 
 
         toDoService.getByUserId(id).forEach(toDo -> tasks.addAll(toDo.getTasks()));
@@ -66,7 +66,7 @@ public class TaskController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("counter", new Counter());
         model.addAttribute("todo_id",todo_id);
-
+        model.addAttribute("todo_name",toDoService.readById(todo_id).getTitle());
 
         return "todo-tasks";
     }
