@@ -5,6 +5,39 @@
     <title>All Tasks of ToDo List</title>
 </head>
 <body>
-<p>all tasks from </p>
+<p>all tasks from <!--<span th:text="${userName}"></span>--> </p>
+
+<table border="1">
+    <tr>
+        <td>No.</td>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Priority</td>
+        <td>Status</td>
+        <td>Update</td>
+        <td>Remove</td>
+    </tr>
+    <tr th:each="task: ${tasks}">
+        <td th:text="${counter.getCounter()}"></td>
+        <td th:text="${counter.getCounter()}"></td>
+        <td th:text="${task.getName()}"></td>
+        <td th:text="${task.getPriority().name().toLowerCase()}"></td>
+        <td th:text="${task.getState().getName()}"></td>
+
+
+        <td>
+            <a th:href="@{/tasks/{task_id}/update/todos/{todo_id}(task_id=${task.getId()},todo_id=${task.getTodo().getId()})}">Update</a>
+        </td>
+        <td>
+            <a th:href="@{/tasks/{task_id}/delete/todos/{todo_id}(task_id=${task.getId()},todo_id=${task.getTodo().getId()})}">Remove</a>
+        </td>
+
+    </tr>
+
+
+
+</table>
+<p><a th:href="@{/tasks/create/todos/{todo_id}(todo_id=${todo_id})}">Create</a> </p>
+
 </body>
 </html>

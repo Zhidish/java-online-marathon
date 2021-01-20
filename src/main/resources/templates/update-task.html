@@ -6,5 +6,32 @@
 </head>
 <body>
 
+
+<form th:action="@{/tasks/{task_id}/update/todos/{todo_id}(task_id=${task.getId()},todo_id=${task.getTodo().getId()})}" th:object="${task}" method="post">
+    <p> Name: <input type="text" th:field="*{name}"/></p>
+          <input type="hidden" th:value="*{id}"/>
+    <label> Priority:
+        <select th:name="priority">
+            <option th:value="LOW" selected>Low</option>
+            <option th:value="MEDIUM">Medium</option>
+            <option th:value="HIGH">High</option>
+        </select>
+
+    </label>
+
+    <label> Status:
+        <select th:name="status">
+            <option th:value="New" selected>New</option>
+            <option th:value="Doing">Doing</option>
+            <option th:value="Verify">Verify</option>
+            <option th:value="Done">Done</option>
+        </select>
+    </label>
+    <input type="submit" placeholder="create"/>
+    <input type="reset" placeholder="clean">
+
+</form>
+
+
 </body>
 </html>

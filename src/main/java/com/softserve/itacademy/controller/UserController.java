@@ -103,6 +103,7 @@ public class UserController {
     @GetMapping("/{id}/update")
     public String update(@PathVariable Integer id, Model model) {
         model.addAttribute("user", userService.readById(id));
+
         return "update-user";
     }
 
