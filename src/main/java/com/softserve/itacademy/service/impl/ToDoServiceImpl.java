@@ -5,8 +5,10 @@ import com.softserve.itacademy.repository.ToDoRepository;
 import com.softserve.itacademy.service.ToDoService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -25,8 +27,13 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo readById(long id) {
-        Optional<ToDo> optional = todoRepository.findById(id);
+        try {
+            Optional<ToDo> optional = todoRepository.findById(id);
             return optional.get();
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no todo found in DB");
+
+        }
     }
 
     @Override
@@ -37,19 +44,32 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public void delete(long id) {
-        ToDo todo = readById(id);
+        try {
+            ToDo todo = readById(id);
             todoRepository.delete(todo);
+        }catch(NoSuchElementException e ) {
+            throw new EntityNotFoundException("no todo found in DB");
+        }
     }
 
     @Override
     public List<ToDo> getAll() {
-        List<ToDo> todos = todoRepository.findAll();
-        return todos.isEmpty() ? new ArrayList<>() : todos;
+        try {
+            List<ToDo> todos = todoRepository.findAll();
+            return todos.isEmpty() ? new ArrayList<>() : todos;
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no todoes");
+
+        }
     }
 
     @Override
     public List<ToDo> getByUserId(long userId) {
-        List<ToDo> todos = todoRepository.getByUserId(userId);
-        return todos.isEmpty() ? new ArrayList<>() : todos;
+        try {
+            List<ToDo> todos = todoRepository.getByUserId(userId);
+            return todos.isEmpty() ? new ArrayList<>() : todos;
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no user found ");
+        }
     }
 }

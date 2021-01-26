@@ -5,8 +5,10 @@ import com.softserve.itacademy.repository.UserRepository;
 import com.softserve.itacademy.service.UserService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -25,8 +27,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User readById(long id) {
-        Optional<User> optional = userRepository.findById(id);
+        try {
+            Optional<User> optional = userRepository.findById(id);
             return optional.get();
+
+
+        }catch(NoSuchElementException e ){
+
+            throw new EntityNotFoundException("no user found in DB ");
+        }
     }
 
     @Override
@@ -37,8 +46,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(long id) {
-        User user = readById(id);
+        try {
+            User user = readById(id);
             userRepository.delete(user);
+        }catch(NoSuchElementException e ){
+            throw  new EntityNotFoundException(" on user found in DB");
+        }
     }
 
     @Override
