@@ -2,6 +2,7 @@ package com.softserve.itacademy.controller;
 
 import com.softserve.itacademy.dto.TaskDto;
 import com.softserve.itacademy.dto.TaskTransformer;
+import com.softserve.itacademy.exception.EntityNotFoundException;
 import com.softserve.itacademy.model.Priority;
 import com.softserve.itacademy.model.Task;
 import com.softserve.itacademy.service.StateService;
@@ -52,34 +53,52 @@ public class TaskController {
     }
 
     @GetMapping("/{task_id}/update/todos/{todo_id}")
-    public String update(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model) {
-        TaskDto taskDto = TaskTransformer.convertToDto(taskService.readById(taskId));
-        model.addAttribute("task", taskDto);
-        model.addAttribute("priorities", Priority.values());
-        model.addAttribute("states", stateService.getAll());
+    public String update(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model) throws EntityNotFoundException {
+      try {
+          TaskDto taskDto = TaskTransformer.convertToDto(taskService.readById(taskId));
+          model.addAttribute("task", taskDto);
+          model.addAttribute("priorities", Priority.values());
+          model.addAttribute("states", stateService.getAll());
+      }catch(IllegalArgumentException e ){
+
+          throw new EntityNotFoundException("no task  found");
+      }
         return "update-task";
     }
 
     @PostMapping("/{task_id}/update/todos/{todo_id}")
     public String update(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model,
-                         @Validated @ModelAttribute("task")TaskDto taskDto, BindingResult result) {
-        if (result.hasErrors()) {
-            model.addAttribute("priorities", Priority.values());
-            model.addAttribute("states", stateService.getAll());
-            return "update-task";
+                         @Validated @ModelAttribute("task")TaskDto taskDto, BindingResult result) throws EntityNotFoundException {
+        try {
+            if (result.hasErrors()) {
+                model.addAttribute("priorities", Priority.values());
+                model.addAttribute("states", stateService.getAll());
+                return "update-task";
+            }
+
+            Task task = TaskTransformer.convertToEntity(
+                    taskDto,
+                    todoService.readById(taskDto.getTodoId()),
+                    stateService.readById(taskDto.getStateId())
+            );
+
+            taskService.update(task);
+
+        }catch(IllegalArgumentException e ){
+        throw  new EntityNotFoundException("no task found ");
+
         }
-        Task task = TaskTransformer.convertToEntity(
-                taskDto,
-                todoService.readById(taskDto.getTodoId()),
-                stateService.readById(taskDto.getStateId())
-        );
-        taskService.update(task);
+
         return "redirect:/todos/" + todoId + "/tasks";
     }
 
     @GetMapping("/{task_id}/delete/todos/{todo_id}")
-    public String delete(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId) {
-        taskService.delete(taskId);
+    public String delete(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId) throws EntityNotFoundException {
+        try {
+            taskService.delete(taskId);
+        }catch(Exception e ){
+            throw new EntityNotFoundException("Not task provided to delete in DB");
+        }
         return "redirect:/todos/" + todoId + "/tasks";
     }
 }
