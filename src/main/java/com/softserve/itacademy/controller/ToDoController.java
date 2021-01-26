@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,14 +42,13 @@ public class ToDoController {
     @PostMapping("/create/users/{owner_id}")
     public String create(@PathVariable("owner_id") long ownerId, @Validated @ModelAttribute("todo") ToDo todo, BindingResult result) throws EntityNotFoundException {
         if (result.hasErrors()) {
-
             return "create-todo";
         }
         try {
             todo.setCreatedAt(LocalDateTime.now());
             todo.setOwner(userService.readById(ownerId));
             todoService.create(todo);
-        }catch(IllegalArgumentException e ){
+        }catch(NoSuchElementException e ){
             throw new EntityNotFoundException("no owner found  in DB ");
 
         }
@@ -65,7 +65,7 @@ public class ToDoController {
             model.addAttribute("todo", todo);
             model.addAttribute("tasks", tasks);
             model.addAttribute("users", users);
-        }catch(IllegalArgumentException e ){
+        }catch(NoSuchElementException e ){
             throw new EntityNotFoundException("no  todo found");
         }
         return "todo-tasks";
@@ -76,7 +76,7 @@ public class ToDoController {
     try {
         ToDo todo = todoService.readById(todoId);
         model.addAttribute("todo", todo);
-    }catch(IllegalArgumentException e ){
+    }catch(NoSuchElementException e ){
         throw  new EntityNotFoundException("no todo found in todo");
     }
         return "update-todo";
@@ -94,7 +94,7 @@ public class ToDoController {
             todo.setOwner(oldTodo.getOwner());
             todo.setCollaborators(oldTodo.getCollaborators());
             todoService.update(todo);
-        }catch(IllegalArgumentException e ){
+        }catch(NoSuchElementException e  ){
 
             throw  new EntityNotFoundException("no todo found in DB");
         }
@@ -105,7 +105,7 @@ public class ToDoController {
     public String delete(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId) throws EntityNotFoundException {
       try {
           todoService.delete(todoId);
-      }catch(IllegalArgumentException e ){
+      }catch(NoSuchElementException e  ){
           throw new EntityNotFoundException("no owner found in DB");
       }
         return "redirect:/todos/all/users/" + ownerId;
@@ -117,7 +117,7 @@ public class ToDoController {
             List<ToDo> todos = todoService.getByUserId(userId);
             model.addAttribute("todos", todos);
             model.addAttribute("user", userService.readById(userId));
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e ) {
             throw new EntityNotFoundException("no todo in DB");
 
         }
@@ -132,7 +132,7 @@ public class ToDoController {
             collaborators.add(userService.readById(userId));
             todo.setCollaborators(collaborators);
             todoService.update(todo);
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e ) {
             throw new EntityNotFoundException("no todo  found in DB");
         }
         return "redirect:/todos/" + id + "/tasks";
@@ -147,7 +147,7 @@ public class ToDoController {
             collaborators.remove(userService.readById(userId));
             todo.setCollaborators(collaborators);
             todoService.update(todo);
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e ) {
             throw new EntityNotFoundException("no todo  found in DB");
         }
         return "redirect:/todos/" + id + "/tasks";

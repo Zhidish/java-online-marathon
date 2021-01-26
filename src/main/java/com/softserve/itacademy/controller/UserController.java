@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -40,7 +42,7 @@ public class UserController {
 
 
             return "redirect:/todos/all/users/" + newUser.getId();
-        }catch (IllegalArgumentException e){
+        }catch (NoSuchElementException e ){
 
             throw  new EntityNotFoundException("no role found in DB");
         }
@@ -53,7 +55,7 @@ public class UserController {
             User user = userService.readById(id);
             model.addAttribute("user", user);
             return "user-info";
-        }catch(IllegalArgumentException e ){
+        }catch(NoSuchElementException e ){
             throw new EntityNotFoundException("no user foudn in DB");
 
         }
@@ -66,7 +68,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("roles", roleService.getAll());
             return "update-user";
-        }catch(IllegalArgumentException e ){
+        }catch(NoSuchElementException e ){
 
             throw  new EntityNotFoundException("no user found in DB");
         }
@@ -77,9 +79,8 @@ public class UserController {
     public String delete(@PathVariable("id") long id) throws EntityNotFoundException {
         try {
             userService.delete(id);
-        }catch(IllegalArgumentException e ){
-
-            throw new EntityNotFoundException("no user found in DB");
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no user found in DB"+ e.getClass());
         }
         return "redirect:/users/all";
     }
