@@ -18,5 +18,11 @@ public class ApplicationExceptionHandler {
         return modelAndView;
     }
 
+    @ExceptionHandler(NullEntityReferenceException.class)
+    public ModelAndView nullEntityReferenceExceptionHandler(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("error", HttpStatus.NOT_FOUND);
+        modelAndView.addObject("info", exception.getMessage());
+        return modelAndView;
+    }
 
 }
