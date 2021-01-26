@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import com.softserve.itacademy.exception.NullEntityReferenceException;
 import com.softserve.itacademy.model.ToDo;
 import com.softserve.itacademy.repository.ToDoRepository;
 import com.softserve.itacademy.service.ToDoService;
@@ -22,7 +23,11 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo create(ToDo todo) {
+        try {
             return todoRepository.save(todo);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to create an empty ToDo");
+        }
     }
 
     @Override
@@ -39,7 +44,11 @@ public class ToDoServiceImpl implements ToDoService {
     @Override
     public ToDo update(ToDo todo) {
             ToDo oldTodo = readById(todo.getId());
-                return todoRepository.save(todo);
+        try {
+            return todoRepository.save(todo);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to update an empty ToDo");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import com.softserve.itacademy.exception.NullEntityReferenceException;
 import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.repository.UserRepository;
 import com.softserve.itacademy.service.UserService;
@@ -22,7 +23,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        try {
             return userRepository.save(user);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to create an empty User");
+        }
     }
 
     @Override
@@ -41,7 +46,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
             User oldUser = readById(user.getId());
-                return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to update an empty User");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import com.softserve.itacademy.exception.NullEntityReferenceException;
 import com.softserve.itacademy.model.Role;
 import com.softserve.itacademy.repository.RoleRepository;
 import com.softserve.itacademy.service.RoleService;
@@ -22,7 +23,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role create(Role role) {
-        return roleRepository.save(role);
+        try {
+            return roleRepository.save(role);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to create an empty Role");
+        }
     }
 
     @Override
@@ -40,7 +45,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role update(Role role) {
         Role oldRole = readById(role.getId());
-        return roleRepository.save(role);
+        try {
+            return roleRepository.save(role);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to update an empty Role");
+        }
     }
 
     @Override

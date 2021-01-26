@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import com.softserve.itacademy.exception.NullEntityReferenceException;
 import com.softserve.itacademy.model.Task;
 import com.softserve.itacademy.repository.TaskRepository;
 import com.softserve.itacademy.service.TaskService;
@@ -20,8 +21,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task create(Task user) {
-        return taskRepository.save(user);
+    public Task create(Task task) {
+        try {
+            return taskRepository.save(task);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to create an empty Task");
+        }
     }
 
     @Override
@@ -40,7 +45,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task update(Task task) {
         Task oldTask = readById(task.getId());
-        return taskRepository.save(task);
+        try {
+            return taskRepository.save(task);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to update an empty Task");
+        }
     }
 
     @Override

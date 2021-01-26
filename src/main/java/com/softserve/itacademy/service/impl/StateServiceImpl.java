@@ -1,5 +1,6 @@
 package com.softserve.itacademy.service.impl;
 
+import com.softserve.itacademy.exception.NullEntityReferenceException;
 import com.softserve.itacademy.model.State;
 import com.softserve.itacademy.repository.StateRepository;
 import com.softserve.itacademy.service.StateService;
@@ -21,7 +22,11 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public State create(State state) {
+        try {
             return stateRepository.save(state);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to create an empty State");
+        }
     }
 
     @Override
@@ -39,7 +44,11 @@ public class StateServiceImpl implements StateService {
     @Override
     public State update(State state) {
             State oldState = readById(state.getId());
-                return stateRepository.save(state);
+        try {
+            return stateRepository.save(state);
+        } catch (IllegalArgumentException e) {
+            throw new NullEntityReferenceException("Attempt to update an empty State");
+        }
     }
 
     @Override
