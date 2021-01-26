@@ -5,8 +5,10 @@ import com.softserve.itacademy.repository.TaskRepository;
 import com.softserve.itacademy.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -19,36 +21,59 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task create(Task user) {
-            return taskRepository.save(user);
+        return taskRepository.save(user);
     }
 
     @Override
     public Task readById(long id) {
-        Optional<Task> optional = taskRepository.findById(id);
+        try {
+            Optional<Task> optional = taskRepository.findById(id);
+
             return optional.get();
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("no task found  in DB");
+
+
+        }
     }
 
     @Override
     public Task update(Task task) {
-            Task oldTask = readById(task.getId());
-                return taskRepository.save(task);
+        Task oldTask = readById(task.getId());
+        return taskRepository.save(task);
     }
 
     @Override
     public void delete(long id) {
-        Task task = readById(id);
+        try {
+            Task task = readById(id);
             taskRepository.delete(task);
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no task found in DB ");
+
+        }
     }
 
     @Override
     public List<Task> getAll() {
-        List<Task> tasks = taskRepository.findAll();
-        return tasks.isEmpty() ? new ArrayList<>() : tasks;
+        try {
+            List<Task> tasks = taskRepository.findAll();
+            return tasks.isEmpty() ? new ArrayList<>() : tasks;
+        }catch(NoSuchElementException e ){
+            throw new EntityNotFoundException("no tasks foud ");
+
+        }
     }
 
     @Override
     public List<Task> getByTodoId(long todoId) {
-        List<Task> tasks = taskRepository.getByTodoId(todoId);
-        return tasks.isEmpty() ? new ArrayList<>() : tasks;
+        try {
+            List<Task> tasks = taskRepository.getByTodoId(todoId);
+            return tasks.isEmpty() ? new ArrayList<>() : tasks;
+        }catch (NoSuchElementException e ){
+
+            throw new EntityNotFoundException("no todo found in DB");
+        }
+
     }
 }

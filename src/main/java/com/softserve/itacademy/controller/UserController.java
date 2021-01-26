@@ -1,6 +1,5 @@
 package com.softserve.itacademy.controller;
 
-import com.softserve.itacademy.exception.EntityNotFoundException;
 import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.service.RoleService;
 import com.softserve.itacademy.service.UserService;
@@ -9,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -31,57 +28,45 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(@Validated @ModelAttribute("user") User user, BindingResult result) throws EntityNotFoundException {
+    public String create(@Validated @ModelAttribute("user") User user, BindingResult result){
         if (result.hasErrors()) {
             return "create-user";
         }
-        try {
+
             user.setPassword(user.getPassword());
             user.setRole(roleService.readById(2));
             User newUser = userService.create(user);
 
 
             return "redirect:/todos/all/users/" + newUser.getId();
-        }catch (NoSuchElementException e ){
-
-            throw  new EntityNotFoundException("no role found in DB");
-        }
 
     }
 
     @GetMapping("/{id}/read")
-    public String read(@PathVariable long id, Model model) throws EntityNotFoundException {
-        try {
+    public String read(@PathVariable long id, Model model) {
+
             User user = userService.readById(id);
             model.addAttribute("user", user);
             return "user-info";
-        }catch(NoSuchElementException e ){
-            throw new EntityNotFoundException("no user foudn in DB");
 
-        }
     }
 
     @GetMapping("/{id}/update")
-    public String update(@PathVariable long id, Model model) throws EntityNotFoundException {
-        try {
+    public String update(@PathVariable long id, Model model)  {
+
             User user = userService.readById(id);
             model.addAttribute("user", user);
             model.addAttribute("roles", roleService.getAll());
             return "update-user";
-        }catch(NoSuchElementException e ){
 
-            throw  new EntityNotFoundException("no user found in DB");
-        }
     }
 
 
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable("id") long id) throws EntityNotFoundException {
-        try {
+    public String delete(@PathVariable("id") long id){
+
             userService.delete(id);
-        }catch(NoSuchElementException e ){
-            throw new EntityNotFoundException("no user found in DB"+ e.getClass());
-        }
+
         return "redirect:/users/all";
     }
 

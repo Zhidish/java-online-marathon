@@ -1,6 +1,5 @@
 package com.softserve.itacademy.controller;
 
-import com.softserve.itacademy.exception.EntityNotFoundException;
 import com.softserve.itacademy.model.Task;
 import com.softserve.itacademy.model.ToDo;
 import com.softserve.itacademy.model.User;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -40,24 +38,21 @@ public class ToDoController {
     }
 
     @PostMapping("/create/users/{owner_id}")
-    public String create(@PathVariable("owner_id") long ownerId, @Validated @ModelAttribute("todo") ToDo todo, BindingResult result) throws EntityNotFoundException {
+    public String create(@PathVariable("owner_id") long ownerId, @Validated @ModelAttribute("todo") ToDo todo, BindingResult result)  {
         if (result.hasErrors()) {
             return "create-todo";
         }
-        try {
+
             todo.setCreatedAt(LocalDateTime.now());
             todo.setOwner(userService.readById(ownerId));
             todoService.create(todo);
-        }catch(NoSuchElementException e ){
-            throw new EntityNotFoundException("no owner found  in DB ");
 
-        }
         return "redirect:/todos/all/users/" + ownerId;
     }
 
     @GetMapping("/{id}/tasks")
-    public String read(@PathVariable long id, Model model) throws EntityNotFoundException {
-        try {
+    public String read(@PathVariable long id, Model model) {
+
             ToDo todo = todoService.readById(id);
             List<Task> tasks = taskService.getByTodoId(id);
             List<User> users = userService.getAll().stream()
@@ -65,27 +60,23 @@ public class ToDoController {
             model.addAttribute("todo", todo);
             model.addAttribute("tasks", tasks);
             model.addAttribute("users", users);
-        }catch(NoSuchElementException e ){
-            throw new EntityNotFoundException("no  todo found");
-        }
+
         return "todo-tasks";
     }
 
     @GetMapping("/{todo_id}/update/users/{owner_id}")
-    public String update(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId, Model model) throws EntityNotFoundException {
-    try {
+    public String update(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId, Model model){
+
         ToDo todo = todoService.readById(todoId);
         model.addAttribute("todo", todo);
-    }catch(NoSuchElementException e ){
-        throw  new EntityNotFoundException("no todo found in todo");
-    }
+
         return "update-todo";
     }
 
     @PostMapping("/{todo_id}/update/users/{owner_id}")
     public String update(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId,
-                         @Validated @ModelAttribute("todo") ToDo todo, BindingResult result) throws EntityNotFoundException {
-        try {
+                         @Validated @ModelAttribute("todo") ToDo todo, BindingResult result) {
+
             if (result.hasErrors()) {
                 todo.setOwner(userService.readById(ownerId));
                 return "update-todo";
@@ -94,62 +85,50 @@ public class ToDoController {
             todo.setOwner(oldTodo.getOwner());
             todo.setCollaborators(oldTodo.getCollaborators());
             todoService.update(todo);
-        }catch(NoSuchElementException e  ){
 
-            throw  new EntityNotFoundException("no todo found in DB");
-        }
         return "redirect:/todos/all/users/" + ownerId;
     }
 
     @GetMapping("/{todo_id}/delete/users/{owner_id}")
-    public String delete(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId) throws EntityNotFoundException {
-      try {
+    public String delete(@PathVariable("todo_id") long todoId, @PathVariable("owner_id") long ownerId) {
+
           todoService.delete(todoId);
-      }catch(NoSuchElementException e  ){
-          throw new EntityNotFoundException("no owner found in DB");
-      }
+
         return "redirect:/todos/all/users/" + ownerId;
     }
 
     @GetMapping("/all/users/{user_id}")
-    public String getAll(@PathVariable("user_id") long userId, Model model) throws EntityNotFoundException {
-        try {
+    public String getAll(@PathVariable("user_id") long userId, Model model)  {
+
             List<ToDo> todos = todoService.getByUserId(userId);
             model.addAttribute("todos", todos);
             model.addAttribute("user", userService.readById(userId));
-        } catch (NoSuchElementException e ) {
-            throw new EntityNotFoundException("no todo in DB");
 
-        }
         return "todos-user";
     }
 
     @GetMapping("/{id}/add")
-    public String addCollaborator(@PathVariable long id, @RequestParam("user_id") long userId) throws EntityNotFoundException {
-        try {
+    public String addCollaborator(@PathVariable long id, @RequestParam("user_id") long userId) {
+
             ToDo todo = todoService.readById(id);
             List<User> collaborators = todo.getCollaborators();
             collaborators.add(userService.readById(userId));
             todo.setCollaborators(collaborators);
             todoService.update(todo);
-        } catch (NoSuchElementException e ) {
-            throw new EntityNotFoundException("no todo  found in DB");
-        }
+
         return "redirect:/todos/" + id + "/tasks";
     }
 
     @GetMapping("/{id}/remove")
-    public String removeCollaborator(@PathVariable long id, @RequestParam("user_id") long userId) throws EntityNotFoundException {
-        try {
+    public String removeCollaborator(@PathVariable long id, @RequestParam("user_id") long userId)  {
+
             ToDo todo = todoService.readById(id);
 
             List<User> collaborators = todo.getCollaborators();
             collaborators.remove(userService.readById(userId));
             todo.setCollaborators(collaborators);
             todoService.update(todo);
-        } catch (NoSuchElementException e ) {
-            throw new EntityNotFoundException("no todo  found in DB");
-        }
+
         return "redirect:/todos/" + id + "/tasks";
     }
 }
