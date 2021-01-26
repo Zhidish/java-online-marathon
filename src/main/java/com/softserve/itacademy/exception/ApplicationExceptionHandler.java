@@ -13,7 +13,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ModelAndView deleteHandlerException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView("500error", HttpStatus.INTERNAL_SERVER_ERROR);
+        ModelAndView modelAndView = new ModelAndView("error", HttpStatus.INTERNAL_SERVER_ERROR);
         modelAndView.addObject("info", exception.getMessage());
         return modelAndView;
     }
