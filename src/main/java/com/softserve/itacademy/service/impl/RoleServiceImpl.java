@@ -59,8 +59,6 @@ public class RoleServiceImpl implements RoleService {
             roleRepository.delete(role);
 
         }catch(NoSuchElementException e ){
-
-
             throw  new EntityNotFoundException(" no role found in DB ");
 
         }
