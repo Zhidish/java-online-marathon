@@ -4,6 +4,7 @@ import com.softserve.itacademy.model.User;
 import com.softserve.itacademy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +24,8 @@ import static org.springframework.security.core.userdetails.User.*;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 
-
-
     @Autowired
+            @Lazy
     UserService  userService;
 
 

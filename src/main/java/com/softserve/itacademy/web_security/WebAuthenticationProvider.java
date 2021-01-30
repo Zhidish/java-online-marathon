@@ -1,52 +1,49 @@
 package com.softserve.itacademy.web_security;
 
+
+import com.softserve.itacademy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class WebAuthenticationProvider implements AuthenticationProvider {
 
-    @Qualifier("UserDetailsService")
+    private UserService userService;
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    UserDetailsService userDetailsService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String name = authentication.getName();
+        String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(name);
-        if (userDetails != null && password.equals(userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(
-                    userDetails.getUsername(),
-                    userDetails.getPassword(),
-                    userDetails.getAuthorities());
 
+        System.err.println(username);
 
-        } else {
-            return null;
+        UserDetails userDetails = userService.findByEmail(username);
+        System.err.println(passwordEncoder.encode(userDetails.getPassword()));
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            return new WebAuthenticationToken(userDetails);
         }
-
-
+        return null;
     }
 
     @Override
-    public boolean supports(Class<?> aClass) {
-        return false;
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth, AuthenticationProvider provider) {
-        auth.authenticationProvider(provider);
-
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
