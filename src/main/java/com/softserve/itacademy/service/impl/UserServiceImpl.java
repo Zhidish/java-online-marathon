@@ -52,4 +52,17 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return users.isEmpty() ? new ArrayList<>() : users;
     }
+
+
+    public User findByEmail(String email) {
+
+        try {
+            return userRepository.findByEmail(email);
+        } catch (Exception e) {
+            throw new NullEntityReferenceException("no User found  by email ");
+
+        }
+    }
+
+
 }
